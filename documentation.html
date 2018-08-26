@@ -1196,8 +1196,10 @@ function changeColor() {
 		<footer>Copyright 2018 <a href="https://creativetechguy.com" target="_blank">Jason O'Neill</a></footer>
 	</main>
 	<script src="resources/prism/prism.js"></script>
+	<script src="resources/blob.js"></script>
+	<script src="resources/FileSaver.js"></script>
 	<script src="ldom.dev.js?v=3"></script>
-	<script src="resources/download.js"></script>
+
 	<script>
 		var nav = $("nav");
 		var navLinkDiv = nav.find("div");
@@ -1235,7 +1237,7 @@ function changeColor() {
 
 		http("GET", "ldom.dev.js?v=3", {}, function (source) {
 			$("#download").on("click", function () {
-				download("data:text/plain;charset=utf-8," + encodeURIComponent(source), "ldom.dev.js", "text/plain");
+				saveAs(new Blob([source], { type: "text/plain;charset=utf-8" }), "ldom.dev.js");
 			});
 		});
 

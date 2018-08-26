@@ -198,7 +198,8 @@
 	<script src="resources/uglify/scope.js?v=3"></script>
 	<script src="resources/uglify/output.js?v=3"></script>
 	<script src="resources/uglify/compress.js?v=3"></script>
-	<script src="resources/download.js"></script>
+	<script src="resources/blob.js"></script>
+	<script src="resources/FileSaver.js"></script>
 	<script>
 		http("GET", "ldom.dev.js?v=3", {}, function (source) {
 			sourceCode = source;
@@ -223,9 +224,8 @@
 			}
 
 			$("#currentSize").text(nwc(source.length) + " bytes");
-			$("#download").off("click");
 			$("#download").on("click", function () {
-				download("data:text/plain;charset=utf-8," + encodeURIComponent(source), "ldom.min.js", "text/plain");
+				saveAs(new Blob([source], { type: "text/plain;charset=utf-8" }), "ldom.min.js");
 			});
 		}
 
