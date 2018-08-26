@@ -1,0 +1,253 @@
+body {
+	font-size: 1.2em;
+	overflow-y: scroll;
+	margin: 0;
+}
+
+button {
+	font-family: "Times New Roman", Times, serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	text-align: center;
+}
+
+a {
+	color: #0000ee;
+}
+
+.p-like {
+	display: block;
+	margin: 1em 0;
+}
+
+nav {
+	width: 13rem;
+	height: 100%;
+	border: 1px solid #000000;
+	display: block;
+	box-sizing: border-box;
+	position: fixed;
+	overflow-y: auto;
+	background: #ffefdc;
+	padding-bottom: 5vh;
+}
+
+.title-link {
+	color: #ff8800;
+	text-decoration: none;
+}
+
+.nav-link {
+	display: block;
+	color: #0000ee;
+	padding: 0.25em 0.75em;
+	text-decoration: none;
+}
+
+.nav-link:nth-child(2n) {
+	background: #ffe1be;
+}
+
+.nav-link:hover {
+	background: #ffc98b;
+}
+
+main {
+	display: block;
+	box-sizing: border-box;
+	padding: 0.5em 1em;
+}
+
+nav ~ main {
+	width: calc(100% - 13rem - 1rem);
+	margin-left: calc(13.5rem);
+}
+
+section {
+	margin: auto;
+	margin-bottom: 1.5em;
+	max-width: 60rem;
+	padding: 0.5em;
+	border: 1px solid #000000;
+}
+
+.section-title {
+	margin: 0.5em 0;
+}
+
+.section-title > a {
+	color: #000000;
+	text-decoration: none;
+}
+
+.section-title > a::after,
+.section-title > a::before {
+	content: "¶";
+	padding: 0.5em;
+	vertical-align: text-top;
+	opacity: 0;
+}
+
+.section-title > a:hover::after {
+	opacity: 0.3;
+}
+
+code[class*="language-"] {
+	font-size: 0.9em;
+}
+
+.large-button {
+	position: relative;
+	display: block;
+	margin: 0.5em auto;
+	padding: 0.5em 1em;
+	font-size: 1.25em;
+	background: #f0c18b;
+	border: 0;
+	box-shadow: 2px 2px 5px #000000;
+	cursor: pointer;
+	transition: background 0.25s;
+	text-decoration: none;
+	width: 10em;
+	text-align: center;
+	color: #000000;
+}
+
+.large-button:hover {
+	background: #ff8800;
+}
+
+.large-button:active {
+	box-shadow: none;
+	top: 2px;
+	left: 2px;
+}
+
+#menu {
+	display: none;
+	position: fixed;
+	height: 2em;
+	width: 2em;
+	padding: 0.7em;
+	z-index: 998;
+	cursor: pointer;
+}
+
+#close {
+	display: none;
+	position: fixed;
+	height: 2em;
+	width: 2em;
+	padding: 0.7em;
+	z-index: 1000;
+	cursor: pointer;
+}
+
+table {
+	margin: 0.4em auto;
+	border: 1px solid #000000;
+}
+
+table,
+tbody,
+tr,
+th,
+td {
+	border: 1px solid #000000;
+	border-collapse: collapse;
+	padding: 0.1em 0.4em;
+}
+
+th {
+	border-bottom: 2px solid #000000;
+}
+
+.menu-viewing-highlight {
+	transition: background 0.5s;
+	border: 1px solid #ff8800;
+	background: rgba(255, 119, 0, 0.445) !important;
+}
+
+.doc-title {
+	text-align: start;
+	margin: 0;
+}
+
+.doc-box {
+	border-radius: 1em;
+	border: 1px dashed #000000;
+	padding: 0.5em;
+	margin: 0.5em;
+}
+
+dl {
+	margin: 0;
+}
+
+dt {
+	font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+	background: #d6d6d6;
+	display: inline-block;
+}
+
+main > footer {
+	text-align: center;
+	margin-bottom: 5em;
+}
+
+nav > footer {
+	display: none;
+	text-align: center;
+	margin: 1em 0;
+}
+
+@media screen and (max-width: 600px) {
+	main {
+		width: 100%;
+		margin-left: 0;
+	}
+
+	.large-button {
+		font-size: 1em;
+	}
+
+	nav {
+		display: none;
+		width: 100%;
+		z-index: 999;
+	}
+
+	#menu {
+		display: block;
+	}
+
+	#close {
+		display: block;
+	}
+
+	.nav-link {
+		text-align: center;
+	}
+
+	.nav-title::before {
+		content: "LDOM ";
+	}
+
+	.section-title > a::before {
+		content: "";
+	}
+
+	.section-title > a::after {
+		opacity: 0.3;
+	}
+
+	nav > footer {
+		display: block;
+	}
+}

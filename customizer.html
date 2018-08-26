@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="keywords" content="jquery, ldom, lightweight, dom, javascript, data, manipulation, web, web app, library, customizer, minifier">
+	<meta name="description" content="Customize your LDOM library download.">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=1">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=1">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=1">
+	<link rel="manifest" href="/site.webmanifest?v=1">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg?v=1" color="#ff8800">
+	<link rel="shortcut icon" href="/favicon.ico?v=1">
+	<meta name="apple-mobile-web-app-title" content="LDOM">
+	<meta name="application-name" content="LDOM">
+	<meta name="msapplication-TileColor" content="#da532c">
+	<meta name="theme-color" content="#ff8800">
+
+	<meta property="og:title" content="LDOM Customizer">
+	<meta property="og:url" content="http://lightweightdom.com/customizer">
+	<meta property="og:description" content="Customize your LDOM library download.">
+	<meta property="og:image" content="http://lightweightdom.com/feather.png">
+
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:site" content="@JasonONeillCTG" />
+	<meta name="twitter:title" content="LDOM Customizer" />
+	<meta name="twitter:description" content="Customize your LDOM library download." />
+	<meta name="twitter:image" content="http://lightweightdom.com/feather.png" />
+
+	<title>LDOM Customizer</title>
+	<link href="main.css" rel="stylesheet" />
+	<link href="resources/prism.css" rel="stylesheet" />
+
+	<style>
+		#ldomFunctions>div {
+			width: 25%;
+			display: inline-block;
+		}
+
+		input[type="checkbox"] {
+			width: 1.5em;
+			height: 1.5em;
+		}
+
+		input[type="checkbox"]~span,
+		input[type="checkbox"]~a {
+			vertical-align: top;
+		}
+
+		.function-info {
+			opacity: .3;
+			margin: .25em;
+		}
+
+		@media screen and (max-width: 800px) {
+			#ldomFunctions>div {
+				width: 33.33%;
+				display: inline-block;
+			}
+		}
+
+		@media screen and (max-width: 600px) {
+			#ldomFunctions>div {
+				width: 50%;
+				display: inline-block;
+			}
+		}
+	</style>
+</head>
+<body>
+	<main>
+		<header>
+			<h1><a href="/" class="title-link">LDOM Customizer</a></h1>
+		</header>
+		<section>
+			<h2 class="section-title">Customize LDOM Download</h2>
+			<p>
+				After you have finished development, you can download a minified production version of LDOM here. You can run <code class="language-js">getLDOMFunctionUsage()</code> in the browser console of your webpage to see which LDOM functions you don't use. Make sure you interact with all of the features of your webpage to get accurate results.
+			</p>
+			<p>
+				<div id="ldomFunctions">
+
+				</div>
+				<a class="large-button" id="download">Download ldom.min.js</a>
+				<h4>Current Size: <span id="currentSize"></span> bytes</h4>
+			</p>
+		</section>
+	</main>
+	<script src="uglify/minify.js"></script>
+	<script src="uglify/utils.js"></script>
+	<script src="uglify/ast.js"></script>
+	<script src="uglify/parse.js"></script>
+	<script src="uglify/transform.js"></script>
+	<script src="uglify/scope.js"></script>
+	<script src="uglify/output.js"></script>
+	<script src="uglify/compress.js"></script>
+	<script src="resources/prism.js"></script>
+	<script src="ldom.dev.js"></script>
+	<script>
+		var alwaysActive = ["each", "find"];
+		var div = $("#ldomFunctions");
+		var keys = Object.keys(div);
+		var sourceCode = "";
+
+
+		for (var i = 0; i < keys.length; i++) {
+			if (keys[i][0] !== "_" && typeof div[keys[i]] === "function") {
+				var isAlwaysActive = alwaysActive.indexOf(keys[i]) > -1;
+				var newCheckboxGroup = $("<div>").appendChild($("<input>").attr("data-function-name", keys[i]).attr("type", "checkbox").prop("checked", true).prop("disabled", isAlwaysActive)).appendChild($("<span>").text(keys[i] + "()")).appendChild($("<a>").text("?").addClass("function-info").attr("title", "View Documentation").attr("href", "/#" + keys[i]).attr("target", "_blank"));
+				if (isAlwaysActive) {
+					newCheckboxGroup.attr("title", "Cannot disable core function.");
+					if ($("input[type='checkbox'][disabled]").length > 0) {
+						$("input[type='checkbox'][disabled]").parent().last().after(newCheckboxGroup);
+					} else if ($("input").length > 0) {
+						$("input").parent().first().before(newCheckboxGroup);
+					} else {
+						div.appendChild(newCheckboxGroup);
+					}
+				} else {
+					div.appendChild(newCheckboxGroup);
+				}
+			}
+		}
+
+		$("input[type='checkbox']").on("change", function () {
+			var trimmedSourceCode = sourceCode;
+			$("#ldomFunctions").find("input").each(function () {
+				if (!this.prop("checked")) {
+					trimmedSourceCode = trimmedSourceCode.replace(new RegExp("this\\." + this.attr("data-function-name") + " = " + this.attr("data-function-name") + ";", "g"), "");
+					trimmedSourceCode = trimmedSourceCode.replace(this[this.attr("data-function-name")].toString(), "");
+				}
+			});
+			generateDownloadLink(trimmedSourceCode);
+		});
+
+		http("GET", "ldom.dev.js", {}, function (source) {
+			sourceCode = source;
+			sourceCode = sourceCode.replace("window.getLDOMFunctionUsage = ", "");
+			sourceCode = sourceCode.replace(getLDOMFunctionUsage.toString(), "");
+			sourceCode = sourceCode.replace("functionsUsed: {}", "");
+			sourceCode = sourceCode.replace(new RegExp("LDOM\\.functionsUsed\\[arguments\\.callee\\.name\\] = true;", "g"), "");
+			generateDownloadLink(sourceCode);
+		});
+
+		function generateDownloadLink(source) {
+			source = source.replace(new RegExp("LDOM_hidden_previous_display", "g"), "LDOM_hpd");
+			source = source.replace(new RegExp("LDOM_hidden", "g"), "LDOM_h");
+			source = source.replace(new RegExp("eventListenerCounter", "g"), "elc");
+			source = source.replace(new RegExp("eventListenerFunctions", "g"), "elf");
+			var result = minify(source);
+			$("#currentSize").text(nwc(result.code.length));
+			$("#download").attr("href", "data:text/plain;charset=utf-8," + encodeURIComponent(result.code)).attr("download", "ldom.min.js");
+		}
+
+		function http(method, path, data, callback) {
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function () {
+				if (this.readyState === 4) {
+					callback(this.responseText);
+				}
+			};
+			var query = "";
+			var dataKeys = Object.keys(data);
+			for (var i = 0; i < dataKeys.length; i++)
+				query += dataKeys[i] + "=" + data[dataKeys[i]] + "&";
+			if (dataKeys.length > 0)
+				query = query.substring(0, query.length - 1);
+			xhttp.open(method, path, true);
+			xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			xhttp.send(query);
+		}
+
+		function nwc(x) {
+			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+	</script>
+</body>
+</html>

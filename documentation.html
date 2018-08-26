@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="keywords" content="jquery, ldom, lightweight, dom, javascript, data, manipulation, web, web app, library">
+	<meta name="description" content="A Lightweight JavaScript library to interact with the browser DOM.">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=1">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=1">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=1">
+	<link rel="manifest" href="/site.webmanifest?v=1">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg?v=1" color="#ff8800">
+	<link rel="shortcut icon" href="/favicon.ico?v=1">
+	<meta name="apple-mobile-web-app-title" content="LDOM">
+	<meta name="application-name" content="LDOM">
+	<meta name="msapplication-TileColor" content="#da532c">
+	<meta name="theme-color" content="#ff8800">
+
+	<meta property="og:title" content="Lightweight DOM Library">
+	<meta property="og:url" content="http://lightweightdom.com">
+	<meta property="og:description" content="A Lightweight JavaScript library to interact with the browser DOM.">
+	<meta property="og:image" content="http://lightweightdom.com/feather.png">
+
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:site" content="@JasonONeillCTG" />
+	<meta name="twitter:title" content="Lightweight DOM Library" />
+	<meta name="twitter:description" content="A Lightweight JavaScript library to interact with the browser DOM." />
+	<meta name="twitter:image" content="http://lightweightdom.com/feather.png" />
+
+	<title>LDOM API Documentation</title>
+	<link href="main.css" rel="stylesheet" />
+	<link href="resources/prism.css" rel="stylesheet" />
+</head>
+<body>
+	<img id="menu" src="resources/menu.svg" />
+	<nav>
+		<img id="close" src="resources/close.svg" />
+		<h3 class="nav-title">Menu</h3>
+		<div>
+
+		</div>
+		<footer>Copyright 2018 <a href="https://creativetechguy.com" target="_blank">Jason O'Neill</a></footer>
+	</nav>
+	<main>
+		<header>
+			<h1><a href="/" class="title-link">LDOM API Documentation</a></h1>
+		</header>
+		<section>
+			<h2 class="section-title" id="getting-started">Getting Started</h2>
+			<div class="p-like">
+				LDOM is a Lightweight (about 8% of the size of jQuery) way to interact with the browser DOM (Document Object Model). To start development, download the development version and include it in your webpage.
+				<a class="large-button" id="download">Download ldom.dev.js</a>
+				<pre><code class="language-html">&lt;script src="ldom.dev.js"&gt;&lt;/script&gt;</code></pre> Once you are ready for production, you can run <code class="language-js">getLDOMFunctionUsage()</code> in your browser console. This will show which features of LDOM you have used so far on the current page. Then you can customize your LDOM download to only include the features you need!<br>
+				<em>Be sure to interact with all of the features of your webpage to get an accurate usage list.</em>
+				<a class="large-button" href="customizer">Customize ldom.min.js</a>
+			</div>
+			<div class="p-like">
+				If you are familiar with jQuery, then LDOM will feel very similar. In many common use cases, LDOM can simply be a drop-in replacement to jQuery without any problems. One way that LDOM is so much smaller and faster than jQuery is that it doesn't support all of the ancient browsers that jQuery does. That being said, by using LDOM, here are the minimum browser versions that are supported. (Basically any browser since 2013)
+				<table>
+					<tr>
+						<th>Browser</th>
+						<th>Version</th>
+					</tr>
+					<tr>
+						<td>Chrome</td>
+						<td>29</td>
+					</tr>
+					<tr>
+						<td>Firefox</td>
+						<td>23</td>
+					</tr>
+					<tr>
+						<td>Safari</td>
+						<td>6</td>
+					</tr>
+					<tr>
+						<td>IE</td>
+						<td>9</td>
+					</tr>
+					<tr>
+						<td>Edge</td>
+						<td>all</td>
+					</tr>
+					<tr>
+						<td>Opera</td>
+						<td>12</td>
+					</tr>
+				</table>
+			</div>
+		</section>
+		<section>
+			<h2 class="section-title" id="example-usage">Example Usage</h2>
+			<h3 class="section-title">Comparison between LDOM and Vanilla JavaScript</h3>
+			<div class="doc-box">
+				<h3>Set the text of all buttons.</h3>
+				<h4 class="doc-title">LDOM</h4>
+				<pre><code class="language-js">$("button").text("I am a Button");</code></pre>
+				<h4 class="doc-title">Vanilla JavaScript</h4>
+				<pre><code class="language-js">var buttons = document.querySelectorAll("button");
+for (var i = 0; i &lt; buttons.length; i++) {
+	buttons[i].innerText = "I am a Button";	
+}</code></pre>
+			</div>
+			<div class="doc-box">
+				<h3>Add a class to all parents of buttons.</h3>
+				<h4 class="doc-title">LDOM</h4>
+				<pre><code class="language-js">$("button").parent().addClass("button-parent");</code></pre>
+				<h4 class="doc-title">Vanilla JavaScript</h4>
+				<pre><code class="language-js">var buttons = document.querySelectorAll("button");
+for (var i = 0; i &lt; buttons.length; i++) {
+	if (buttons[i].parentNode.className.split(" ").indexOf("button-parent") === -1) {
+		buttons[i].parentNode.className += " " + "button-parent";	
+	}
+}</code></pre>
+			</div>
+			<div class="doc-box">
+				<h3>Add a click event to all buttons. Remove that event from a certain button.</h3>
+				<h4 class="doc-title">LDOM</h4>
+				<pre><code class="language-js">var activateButtonEventId = $("button").on("click", function(){
+	this.addClass("button-active");	
+});
+$("button").eq(1).off("click", activateButtonEventId);</code></pre>
+				<h4 class="doc-title">Vanilla JavaScript</h4>
+				<pre><code class="language-js">var buttons = document.querySelectorAll("button");
+for (var i = 0; i &lt; buttons.length; i++) {
+	buttons[i].addEventListener("click", addButtonActiveClass);
+}
+buttons[1].removeEventListener("click", addButtonActiveClass);
+
+function addButtonActiveClass(){
+	if (buttons[i].className.split(" ").indexOf("button-active") === -1) {
+		buttons[i].className += " " + "button-active";	
+	}
+}</code></pre>
+			</div>
+			<div class="doc-box">
+				<h3>Create a text element and insert it after each button.</h3>
+				<h4 class="doc-title">LDOM</h4>
+				<pre><code class="language-js">$("&lt;text&gt;").css("text-align", "center").text("Click the button above!").insertAfter($("button"));</code></pre>
+				<h4 class="doc-title">Vanilla JavaScript</h4>
+				<pre><code class="language-js">var textElem = document.createElement("text");
+textElem.style.textAlign = "center";
+textElem.innerText = "Click the button above!";
+var buttons = document.querySelectorAll("button");
+for (var i = 0; i &lt; buttons.length; i++) {
+	buttons[i].parentNode.insertBefore(textElem, buttons[i].nextSibling);
+}</code></pre>
+			</div>
+			<div class="doc-box">
+				<h3>The side menu on this page was even generated with the following code!</h3>
+				<h4 class="doc-title">LDOM</h4>
+				<pre><code class="language-js">var nav = $("nav");
+$("section").each(function () {
+	var header = this.children().filter(".section-title").first();
+	nav.appendChild($("&lt;a&gt;").addClass("nav-link").prop("href", "#" + header.attr("id")).text(header.text()));
+});</code></pre>
+				<h4 class="doc-title">Vanilla JavaScript</h4>
+				<pre><code class="language-js">var nav = document.querySelectorAll("nav");
+var sections = document.querySelectorAll("section");
+for (var i = 0; i &lt; sections.length; i++) {
+	var children = sections.children;
+	for (var j = 0; j &lt; children.length; j++) {
+		if (children[j].className.split(" ").indexOf("section-title") !== -1) {
+			var header = children[j];
+			var a = document.createElement("a");
+			a.className = "nav-link";
+			a.href = "#" + header.id;
+			a.innerText = header.innerText;
+			nav.appendChild(a);
+			break;
+		}
+	}
+}
+</code></pre>
+			</div>
+			<h3>As you can see, LDOM is an extremely powerful DOM manipulation tool.</h3>
+		</section>
+		<section>
+			<h2 class="section-title" id="ldom-object">$(...)</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">$(selector)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>selector</dt>
+						<dd>A string containing a selector to match elements against.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>An object on which functions can be executed on the element(s) it contains.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button")</code></pre>
+					<pre><code class="language-js">$(".section-title")</code></pre>
+					<pre><code class="language-js">$("a[href='index.html']")</code></pre>
+				</div>
+				<div class="doc-box">
+					<pre><code class="language-js">$(DOMElement)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>DOMElement</dt>
+						<dd>A reference to one or more vanilla DOM Elements.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>An object on which functions can be executed on the element(s) it contains.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$(document.getElementById("#title"))</code></pre>
+					<pre><code class="language-js">$(document.querySelectorAll("button"))</code></pre>
+				</div>
+				<div class="doc-box">
+					<pre><code class="language-js">$(htmlTag)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>htmlTag</dt>
+						<dd>An HTML opening tag with angled brackets.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>An object on which functions can be executed on the element(s) it contains.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("&lt;button&gt;")</code></pre>
+					<pre><code class="language-js">$("&lt;br&gt;")</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="each">.each()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.each(function)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>function</dt>
+						<dd>A <code class="language-js">function(index)</code> which gets called on for each element of the LDOM Object. <code class="language-js">this</code> refers to an LDOM Object for the current element. You can optionally <code class="language-js">return false;</code> from the function to break out of the loop early.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").each(function(){
+	console.log(this.get(0));
+});</code></pre>
+					<pre><code class="language-js">$("p").each(function(i){
+	this.text("Paragraph #" + i);
+});</code></pre>
+				</div>
+				<div class="doc-box">
+					<pre><code class="language-js">.each(function, reverse)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>function</dt>
+						<dd>A <code class="language-js">function(index)</code> which gets called on for each element of the LDOM Object. <code class="language-js">this</code> refers to an LDOM Object for the current element. You can optionally <code class="language-js">return false;</code> from the function to break out of the loop early.</dd>
+						<dt>reverse</dt>
+						<dd>If true, then the elements will be looped through in reverse order.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").each(function(){
+	console.log(this.get(0));
+}, true);</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="equals">.equals()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.equals(LDOMObject)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>LDOMObject</dt>
+						<dd>A LDOM Object to compare against the calling LDOM Object.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>Boolean</dt>
+						<dd>True if both LDOM Objects contain the same elements. False if not.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Information</h3>
+					<div>
+						Although the element order will affect the equality comparison, in most situations this will not make a difference.
+					</div>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("div").children().filter("h1").equals($("div>h1"))</a></code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="find">.find()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.find(selector)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>selector</dt>
+						<dd>A string containing a selector to match elements against. Searches the DOM tree from the current LDOM Object's Elements.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>A new LDOM Object containing the selected elements.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("section").find("h3")</code></pre>
+					<pre><code class="language-js">$("p").find(".alert-text")</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="parent">.parent()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.parent()</code></pre>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>A new LDOM Object containing the parent of each element.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("p").parent()</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="children">.children()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.children()</code></pre>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>A new LDOM Object containing the children of each element.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("p").children()</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="filter">.filter()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.filter(selector)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>selector</dt>
+						<dd>A string containing a selector to match the LDOM Object's Elements against.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>A new LDOM Object containing the matching elements.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("div").children().filter("p")</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="unique">.unique()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.unique()</code></pre>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>A new LDOM Object with duplicate DOM Elements removed.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("p").parent().unique()</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="first">.first()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.first()</code></pre>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>A new LDOM Object containing only the first element.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("p").first()</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="last">.last()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.last()</code></pre>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>A new LDOM Object containing only the last element.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("p").last()</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="eq">.eq()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.eq(index)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>index</dt>
+						<dd>The index of the LDOM Element you wish to retrieve. Negative indexes count from the end of the list.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>A new LDOM Object containing only the first element.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$(".header-title").eq(3)</code></pre>
+					<pre><code class="language-js">$(".header-title").eq(-1)</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="get">.get()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.get()</code></pre>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>DOM Element List</dt>
+						<dd>A list of vanilla DOM Elements from the LDOM Object.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").get()</code></pre>
+				</div>
+				<div class="doc-box">
+					<pre><code class="language-js">.get(index)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>index</dt>
+						<dd>The index of the LDOM Element you wish to retrieve. Negative indexes count from the end of the list.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>DOM Element</dt>
+						<dd>A single vanilla DOM Element from the LDOM Object specified by the index.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Information</h3>
+					<div>
+						Will return <code class="language-js">null</code> if the LDOM Object contains no elements.
+					</div>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$(".header-title").get(3)</code></pre>
+					<pre><code class="language-js">$(".header-title").get(-1)</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="on">.on()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.on(eventName, handler)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>eventName</dt>
+						<dd>The event type you want to listen for.</dd>
+						<dt>handler</dt>
+						<dd>The function to be executed when the event is triggered. <code class="language-js">this</code> refers to an LDOM Object for the element that triggered the event.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>eventId</dt>
+						<dd>A number representing the event that was added. Can be used to remove that event with <code class="language-js">off</code>.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">var buttonClickEventId = $("button").on("click", function(){
+	this.addClass("activated");
+});</code></pre>
+					<pre><code class="language-js">$("a").on("customEvent", function(){
+	console.log("Custom Event Triggered", this);
+});</code></pre>
+					<pre><code class="language-js">$("h3").on("click", changeColor);
+function changeColor() {
+	this.css("color", "#FF0000");
+}</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="off">.off()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.off(eventName)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>eventName</dt>
+						<dd>The event type you want to remove all handlers for.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt><code class="language-js">undefined</code></dt>
+						<dd>There is no return value.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("a").off("customEvent");</code></pre>
+				</div>
+				<div class="doc-box">
+					<pre><code class="language-js">.off(eventName, eventId)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>eventName</dt>
+						<dd>The event type you want to remove the specified handler for.</dd>
+						<dt>eventId</dt>
+						<dd>The ID of the event to remove.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt><code class="language-js">undefined</code></dt>
+						<dd>There is no return value.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").off("click", buttonClickEventId);</code></pre>
+				</div>
+				<div class="doc-box">
+					<pre><code class="language-js">.off(eventName, handler)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>eventName</dt>
+						<dd>The event type you want to remove the specified handler for.</dd>
+						<dt>handler</dt>
+						<dd>A function previously attached with <code class="language-js">.on()</code>.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt><code class="language-js">undefined</code></dt>
+						<dd>There is no return value.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("h3").off("click", changeColor);
+function changeColor() {
+	this.css("color", "#FF0000");
+}</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="trigger">.trigger()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.trigger(eventName)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>eventName</dt>
+						<dd>The event type to send.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").trigger("click");</code></pre>
+					<pre><code class="language-js">$("a").trigger("customEvent");</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="hide">.hide()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.hide()</code></pre> Hides the elements and stores their previous display style. Style can be restored with <code class="language-js">.show()</code>.
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").hide();</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="show">.show()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.show()</code></pre> Returns the elements to the display style that they had before <code class="language-js">.hide()</code> was called.
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").show();</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="toggle">.toggle()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.toggle()</code></pre> Will show the element if it is hidden and hide the element if it's visible.
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").toggle();</code></pre>
+				</div>
+				<div class="doc-box">
+					<pre><code class="language-js">.toggle(show)</code></pre> Will show the element if it is hidden and hide the element if it's visible.
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>show</dt>
+						<dd>If true, elements will be shown regardless of current state. If false, elements will be hidden regardless of current state.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$(".title").toggle(true);</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="css">.css()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.css(property)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>property</dt>
+						<dd>Name of the CSS property to get.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>String</dt>
+						<dd>The computed value of the element's style.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Information</h3>
+					<div>
+						If the LDOM Object contains multiple elements, this will only return the value of the first element. Use <code class="language-js">.eq()</code>, <code class="language-js">.first()</code> or <code class="language-js">.last()</code> to reduce to one element.
+					</div>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").css("font-size");</code></pre>
+					<pre><code class="language-js">$("button").last().css("font-size");</code></pre>
+					<pre><code class="language-js">$("button").eq(2).css("font-size");</code></pre>
+				</div>
+				<div class="doc-box">
+					<pre><code class="language-js">.css(property, value)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>property</dt>
+						<dd>Name of the CSS property to set.</dd>
+						<dt>value</dt>
+						<dd>The value to set the CSS property to.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").css("font-size", "35px");</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="html">.html()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.html()</code></pre>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>String</dt>
+						<dd>The element's inner HTML.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Information</h3>
+					<div>
+						If the LDOM Object contains multiple elements, this will only return the value of the first element. Use <code class="language-js">.eq()</code>, <code class="language-js">.first()</code> or <code class="language-js">.last()</code> to reduce to one element.
+					</div>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").html();</code></pre>
+					<pre><code class="language-js">$("button").last().html();</code></pre>
+					<pre><code class="language-js">$("button").eq(2).html();</code></pre>
+				</div>
+				<div class="doc-box">
+					<pre><code class="language-js">.html(htmlString)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>htmlString</dt>
+						<dd>String containing the HTML content to set.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").html("&lt;a href='index'&gt;Home&lt;/a&gt;");</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="outerHTML">.outerHTML()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.outerHTML()</code></pre>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>String</dt>
+						<dd>The element's outer HTML.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Information</h3>
+					<div>
+						If the LDOM Object contains multiple elements, this will only return the value of the first element. Use <code class="language-js">.eq()</code>, <code class="language-js">.first()</code> or <code class="language-js">.last()</code> to reduce to one element.
+					</div>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").outerHTML();</code></pre>
+					<pre><code class="language-js">$("button").last().outerHTML();</code></pre>
+					<pre><code class="language-js">$("button").eq(2).outerHTML();</code></pre>
+				</div>
+				<div class="doc-box">
+					<pre><code class="language-js">.outerHTML(htmlString)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>htmlString</dt>
+						<dd>String containing the outer HTML to set.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt><code class="language-js">undefined</code></dt>
+						<dd>There is no return value.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Information</h3>
+					<div>
+						Outer HTML replaces the entire element; therefore will break event listeners and any LDOM Objects that had reference to that element. It's not recommend to set outer HTML if you can help it.
+					</div>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("a").outerHTML("&lt;button&gt;I'm now a button!&lt;/button&gt;");</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="text">.text()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.text()</code></pre>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>String</dt>
+						<dd>The element's text.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Information</h3>
+					<div>
+						If the LDOM Object contains multiple elements, this will only return the value of the first element. Use <code class="language-js">.eq()</code>, <code class="language-js">.first()</code> or <code class="language-js">.last()</code> to reduce to one element.
+					</div>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").text();</code></pre>
+					<pre><code class="language-js">$("button").last().text();</code></pre>
+					<pre><code class="language-js">$("button").eq(2).text();</code></pre>
+				</div>
+				<div class="doc-box">
+					<pre><code class="language-js">.text(textString)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>textString</dt>
+						<dd>String containing the text content to set.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").text("Click me!");</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="attr">.attr()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.attr(attributeName)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>attributeName</dt>
+						<dd>Name of the HTML attribute to get.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>String</dt>
+						<dd>The element's HTML attribute value.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Information</h3>
+					<div>
+						If the LDOM Object contains multiple elements, this will only return the value of the first element. Use <code class="language-js">.eq()</code>, <code class="language-js">.first()</code> or <code class="language-js">.last()</code> to reduce to one element.
+					</div>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("input").attr("aria-label");</code></pre>
+					<pre><code class="language-js">$("input").last().attr("title");</code></pre>
+					<pre><code class="language-js">$("input").eq(2).attr("data-meta");</code></pre>
+				</div>
+				<div class="doc-box">
+					<pre><code class="language-js">.attr(attributeName, value)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>attributeName</dt>
+						<dd>Name of the HTML attribute to set.</dd>
+						<dt>value</dt>
+						<dd>String containing the attribute value to set.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").attr("title", "You can click me!");</code></pre>
+				</div>
+				<h3 class="doc-title">Attr vs Prop</h3>
+				<div>
+					Often times <code class="language-js">.attr()</code> and <code class="language-js">.prop()</code> can be used interchangeably. In general, <code class="language-js">.attr()</code> should be used to get/set the value as literally written in the HTML document. <code class="language-js">.prop()</code> should be used to get/set the computed value as seen by JavaScript's DOM tree.
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="prop">.prop()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.prop(propertyName)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>propertyName</dt>
+						<dd>Name of the HTML property to get.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>String</dt>
+						<dd>The element's HTML property value.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Information</h3>
+					<div>
+						If the LDOM Object contains multiple elements, this will only return the value of the first element. Use <code class="language-js">.eq()</code>, <code class="language-js">.first()</code> or <code class="language-js">.last()</code> to reduce to one element.
+					</div>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("input").prop("readOnly");</code></pre>
+					<pre><code class="language-js">$("input").last().prop("value");</code></pre>
+					<pre><code class="language-js">$("input").eq(2).prop("required");</code></pre>
+				</div>
+				<div class="doc-box">
+					<pre><code class="language-js">.prop(propertyName, value)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>propertyName</dt>
+						<dd>Name of the HTML property to set.</dd>
+						<dt>value</dt>
+						<dd>String containing the property value to set.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("input").prop("readOnly", "true");</code></pre>
+					<pre><code class="language-js">$("input").prop("value", "Enter Phone Number");</code></pre>
+				</div>
+				<h3 class="doc-title">Attr vs Prop</h3>
+				<div>
+					Often times <code class="language-js">.attr()</code> and <code class="language-js">.prop()</code> can be used interchangeably. In general, <code class="language-js">.attr()</code> should be used to get/set the value as literally written in the HTML document. <code class="language-js">.prop()</code> should be used to get/set the computed value as seen by JavaScript's DOM tree.
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="addClass">.addClass()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.addClass(className)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>className</dt>
+						<dd>String containing one or more space-separated classes to be added.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Information</h3>
+					<div>
+						Classes will only be added if they are not already present on the element.
+					</div>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").addClass("large-button");</code></pre>
+					<pre><code class="language-js">$("button").addClass("large-button button-warning");</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="removeClass">.removeClass()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.removeClass(className)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>className</dt>
+						<dd>String containing one or more space-separated classes to be removed.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").removeClass("large-button");</code></pre>
+					<pre><code class="language-js">$("button").removeClass("large-button button-warning");</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="hasClass">.hasClass()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.hasClass(className)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>className</dt>
+						<dd>String containing one class name to search for.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>Boolean</dt>
+						<dd>True if any LDOM Object Element has the class. False if all elements do not.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").hasClass("large-button");</code></pre>
+				</div>
+				<div class="doc-box">
+					<pre><code class="language-js">.hasClass(className, all)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>className</dt>
+						<dd>String containing one class name to search for.</dd>
+						<dt>all</dt>
+						<dd>If true, this function will return true only if all elements have the class.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>Boolean</dt>
+						<dd>True if all LDOM Object Elements have the class. False if at least one does not.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").hasClass("large-button", true);</code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="insertAfter">.insertAfter()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.insertAfter(targetElement)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>targetElement</dt>
+						<dd>A LDOM Object for which all of the calling LDOM Elements will be inserted after.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("&lt;a&gt;").text("Click Me").insertAfter($("img"));</a></code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="after">.after()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.after(newElement)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>newElement</dt>
+						<dd>A LDOM Object which will be inserted after the calling LDOM Elements.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("img").after($("&lt;a&gt;").text("Click Me"));</a></code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="insertBefore">.insertBefore()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.insertBefore(targetElement)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>targetElement</dt>
+						<dd>A LDOM Object for which all of the calling LDOM Elements will be inserted before.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("&lt;a&gt;").text("Click Me").insertBefore($("img"));</a></code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="before">.before()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.before(newElement)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>newElement</dt>
+						<dd>A LDOM Object which will be inserted before the calling LDOM Elements.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("img").before($("&lt;a&gt;").text("Click Me"));</a></code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="appendChild">.appendChild()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.appendChild(childElement)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>childElement</dt>
+						<dd>A LDOM Object which will be appended to all of the calling LDOM Elements.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("h3").appendChild($("&lt;img&gt;").attr("src", "banner.png"));</a></code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="remove">.remove()</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.remove()</code></pre> Will remove the calling LDOM Elements from the DOM.
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt><code class="language-js">undefined</code></dt>
+						<dd>There is no return value.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").remove();</a></code></pre>
+				</div>
+			</p>
+		</section>
+		<section>
+			<h2 class="section-title" id="length">.length</h2>
+			<p>
+				<div class="doc-box">
+					<pre><code class="language-js">.length</code></pre>
+					<h3 class="doc-title">Value</h3>
+					<dl>
+						<dt>Number</dt>
+						<dd>The number of LDOM Elements in the LDOM Object.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("section").length</code></pre>
+					<pre><code class="language-js">$("p").children().length</code></pre>
+				</div>
+			</p>
+		</section>
+		<footer>Copyright 2018 <a href="https://creativetechguy.com" target="_blank">Jason O'Neill</a></footer>
+	</main>
+	<script src="resources/prism.js"></script>
+	<script src="ldom.dev.js"></script>
+	<script>
+		var nav = $("nav");
+		var navLinkDiv = nav.find("div");
+		$("section").each(function () {
+			var header = this.children().filter(".section-title").first();
+			var id = header.attr("id");
+			navLinkDiv.appendChild($("<a>").addClass("nav-link").attr("href", "#" + id).text(header.text()));
+			header.html($("<a>").attr("href", "#" + id).text(header.text()).outerHTML());
+		});
+
+		$("#menu").on("click", function () {
+			nav.css("display", "block");
+		});
+		$("#close").on("click", function () {
+			nav.css("display", "");
+		});
+		$(".nav-link").on("click", function () {
+			$("#close").trigger("click");
+		});
+		$(window).on("scroll", function () {
+			var y = this.prop("scrollY") + this.prop("innerHeight") / 2;
+			$(".section-title[id]").each(function () {
+				if (y > this.prop("offsetTop")) {
+					var link = $(".nav-link[href='#" + this.attr("id") + "']");
+					if (!$(".menu-viewing-highlight").equals(link)) {
+						$(".menu-viewing-highlight").removeClass("menu-viewing-highlight");
+						link.addClass("menu-viewing-highlight");
+						nav.prop("scrollTop", link.prop("offsetTop") - nav.prop("clientHeight") / 2);
+						history.replaceState({}, document.title, "#" + this.attr("id"));
+					}
+					return false;
+				}
+			}, true);
+		});
+
+		http("GET", "ldom.dev.js", {}, function (source) {
+			$("#download").attr("href", "data:text/plain;charset=utf-8," + encodeURIComponent(source)).attr("download", "ldom-dev.js");
+		});
+
+		function http(method, path, data, callback) {
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function () {
+				if (this.readyState === 4) {
+					callback(this.responseText);
+				}
+			};
+			var query = "";
+			var dataKeys = Object.keys(data);
+			for (var i = 0; i < dataKeys.length; i++)
+				query += dataKeys[i] + "=" + data[dataKeys[i]] + "&";
+			if (dataKeys.length > 0)
+				query = query.substring(0, query.length - 1);
+			xhttp.open(method, path, true);
+			xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			xhttp.send(query);
+		}
+	</script>
+</body>
+</html>
