@@ -205,6 +205,9 @@
 		LDOM.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(event)) {
 			this.each(function() {
+				if (!isDefined(LDOM.eventListenerFunctions[eventName])){
+					return;
+				}
 				var event = Object.keys(LDOM.eventListenerFunctions[eventName]);
 				for (var i = 0; i < event.length; i++) {
 					this.off(eventName, event[i]);

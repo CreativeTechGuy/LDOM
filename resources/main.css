@@ -208,7 +208,7 @@ nav > footer {
 }
 
 @media screen and (max-width: 600px) {
-	main {
+	nav ~ main  {
 		width: 100%;
 		margin-left: 0;
 	}

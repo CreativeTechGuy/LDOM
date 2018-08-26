@@ -29,8 +29,8 @@
 	<meta name="twitter:image" content="http://lightweightdom.com/feather.png" />
 
 	<title>LDOM Customizer</title>
-	<link href="main.css" rel="stylesheet" />
-	<link href="resources/prism.css" rel="stylesheet" />
+	<link href="resources/main.css?v=2" rel="stylesheet" />
+	<link href="resources/prism/prism.css?v=1" rel="stylesheet" />
 
 	<style>
 		#ldomFunctions>div {
@@ -66,6 +66,13 @@
 				display: inline-block;
 			}
 		}
+
+		@media screen and (max-width: 400px) {
+			#ldomFunctions>div {
+				width: 100%;
+				display: inline-block;
+			}
+		}
 	</style>
 </head>
 <body>
@@ -75,28 +82,23 @@
 		</header>
 		<section>
 			<h2 class="section-title">Customize LDOM Download</h2>
-			<p>
+			<div class="p-like">
 				After you have finished development, you can download a minified production version of LDOM here. You can run <code class="language-js">getLDOMFunctionUsage()</code> in the browser console of your webpage to see which LDOM functions you don't use. Make sure you interact with all of the features of your webpage to get accurate results.
-			</p>
-			<p>
+			</div>
+			<div class="p-like">
 				<div id="ldomFunctions">
 
 				</div>
-				<a class="large-button" id="download">Download ldom.min.js</a>
-				<h4>Current Size: <span id="currentSize"></span> bytes</h4>
-			</p>
+				<div id="downloadInfo">
+					<a class="large-button" id="download">Download ldom.min.js</a>
+					<h4>Current Size: <span id="currentSize">Calculating...</span></h4>
+				</div>
+				<h5 style="display: none;" id="minificationFailure">Minification is not available on this browser.<br>Please use a different browser.<br>Desktop Chrome and Firefox are recommended.</h5>
+			</div>
 		</section>
 	</main>
-	<script src="uglify/minify.js"></script>
-	<script src="uglify/utils.js"></script>
-	<script src="uglify/ast.js"></script>
-	<script src="uglify/parse.js"></script>
-	<script src="uglify/transform.js"></script>
-	<script src="uglify/scope.js"></script>
-	<script src="uglify/output.js"></script>
-	<script src="uglify/compress.js"></script>
-	<script src="resources/prism.js"></script>
-	<script src="ldom.dev.js"></script>
+	<script src="resources/prism/prism.js"></script>
+	<script src="ldom.dev.js?v=3"></script>
 	<script>
 		var alwaysActive = ["each", "find"];
 		var div = $("#ldomFunctions");
@@ -126,32 +128,13 @@
 		$("input[type='checkbox']").on("change", function () {
 			var trimmedSourceCode = sourceCode;
 			$("#ldomFunctions").find("input").each(function () {
-				if (!this.prop("checked")) {
+				if (!this.prop("checked") && alwaysActive.indexOf(this.attr("data-function-name")) === -1) {
 					trimmedSourceCode = trimmedSourceCode.replace(new RegExp("this\\." + this.attr("data-function-name") + " = " + this.attr("data-function-name") + ";", "g"), "");
 					trimmedSourceCode = trimmedSourceCode.replace(this[this.attr("data-function-name")].toString(), "");
 				}
 			});
 			generateDownloadLink(trimmedSourceCode);
 		});
-
-		http("GET", "ldom.dev.js", {}, function (source) {
-			sourceCode = source;
-			sourceCode = sourceCode.replace("window.getLDOMFunctionUsage = ", "");
-			sourceCode = sourceCode.replace(getLDOMFunctionUsage.toString(), "");
-			sourceCode = sourceCode.replace("functionsUsed: {}", "");
-			sourceCode = sourceCode.replace(new RegExp("LDOM\\.functionsUsed\\[arguments\\.callee\\.name\\] = true;", "g"), "");
-			generateDownloadLink(sourceCode);
-		});
-
-		function generateDownloadLink(source) {
-			source = source.replace(new RegExp("LDOM_hidden_previous_display", "g"), "LDOM_hpd");
-			source = source.replace(new RegExp("LDOM_hidden", "g"), "LDOM_h");
-			source = source.replace(new RegExp("eventListenerCounter", "g"), "elc");
-			source = source.replace(new RegExp("eventListenerFunctions", "g"), "elf");
-			var result = minify(source);
-			$("#currentSize").text(nwc(result.code.length));
-			$("#download").attr("href", "data:text/plain;charset=utf-8," + encodeURIComponent(result.code)).attr("download", "ldom.min.js");
-		}
 
 		function http(method, path, data, callback) {
 			var xhttp = new XMLHttpRequest();
@@ -173,6 +156,61 @@
 
 		function nwc(x) {
 			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+	</script>
+	<script src="resources/uglify/minify.js?v=3"></script>
+	<script src="resources/uglify/utils.js?v=3"></script>
+	<script src="resources/uglify/ast.js?v=3"></script>
+	<script src="resources/uglify/parse.js?v=3"></script>
+	<script src="resources/uglify/transform.js?v=3"></script>
+	<script src="resources/uglify/scope.js?v=3"></script>
+	<script src="resources/uglify/output.js?v=3"></script>
+	<script src="resources/uglify/compress.js?v=3"></script>
+	<script src="resources/download.js"></script>
+	<script>
+		http("GET", "ldom.dev.js?v=3", {}, function (source) {
+			sourceCode = source;
+			sourceCode = sourceReplace(sourceCode, "window.getLDOMFunctionUsage = ", "");
+			sourceCode = sourceReplace(sourceCode, getLDOMFunctionUsage.toString(), "");
+			sourceCode = sourceReplace(sourceCode, "functionsUsed: {}", "");
+			sourceCode = sourceReplace(sourceCode, new RegExp("LDOM\\.functionsUsed\\[arguments\\.callee\\.name\\] = true;", "g"), "");
+			generateDownloadLink(sourceCode);
+		});
+
+		function generateDownloadLink(source) {
+			source = sourceReplace(source, new RegExp("LDOM_hidden_previous_display", "g"), "LDOM_hpd");
+			source = sourceReplace(source, new RegExp("LDOM_hidden", "g"), "LDOM_h");
+			source = sourceReplace(source, new RegExp("eventListenerCounter", "g"), "elc");
+			source = sourceReplace(source, new RegExp("eventListenerFunctions", "g"), "elf");
+			var result = minify(source);
+			if (result.error) {
+				failure();
+				return;
+			} else {
+				source = result.code;
+			}
+
+			$("#currentSize").text(nwc(source.length)+" bytes");
+			$("#download").off("click");
+			$("#download").on("click", function () {
+				download("data:text/plain;charset=utf-8," + encodeURIComponent(source), "ldom.min.js", "text/plain");
+			});
+		}
+
+		function sourceReplace(sourceCode, regex, replacement) {
+			if ((regex instanceof RegExp) && sourceCode.match(regex) === null) {
+				failure();
+			} else if (!(regex instanceof RegExp) && sourceCode.indexOf(regex) === -1) {
+				failure();
+			} else {
+				sourceCode = sourceCode.replace(regex, replacement);
+			}
+			return sourceCode;
+		}
+
+		function failure() {
+			$("#minificationFailure").show();
+			$("#downloadInfo").hide();
 		}
 	</script>
 </body>

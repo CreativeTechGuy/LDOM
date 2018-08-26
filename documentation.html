@@ -29,8 +29,8 @@
 	<meta name="twitter:image" content="http://lightweightdom.com/feather.png" />
 
 	<title>LDOM API Documentation</title>
-	<link href="main.css" rel="stylesheet" />
-	<link href="resources/prism.css" rel="stylesheet" />
+	<link href="resources/main.css?v=2" rel="stylesheet" />
+	<link href="resources/prism/prism.css?v=1" rel="stylesheet" />
 </head>
 <body>
 	<img id="menu" src="resources/menu.svg" />
@@ -178,7 +178,7 @@ for (var i = 0; i &lt; sections.length; i++) {
 		</section>
 		<section>
 			<h2 class="section-title" id="ldom-object">$(...)</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">$(selector)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -231,11 +231,11 @@ for (var i = 0; i &lt; sections.length; i++) {
 					<pre><code class="language-js">$("&lt;button&gt;")</code></pre>
 					<pre><code class="language-js">$("&lt;br&gt;")</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="each">.each()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.each(function)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -277,11 +277,11 @@ for (var i = 0; i &lt; sections.length; i++) {
 	console.log(this.get(0));
 }, true);</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="equals">.equals()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.equals(LDOMObject)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -303,11 +303,11 @@ for (var i = 0; i &lt; sections.length; i++) {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("div").children().filter("h1").equals($("div>h1"))</a></code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="find">.find()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.find(selector)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -325,11 +325,11 @@ for (var i = 0; i &lt; sections.length; i++) {
 					<pre><code class="language-js">$("section").find("h3")</code></pre>
 					<pre><code class="language-js">$("p").find(".alert-text")</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="parent">.parent()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.parent()</code></pre>
 					<h3 class="doc-title">Return Value</h3>
@@ -341,11 +341,11 @@ for (var i = 0; i &lt; sections.length; i++) {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("p").parent()</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="children">.children()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.children()</code></pre>
 					<h3 class="doc-title">Return Value</h3>
@@ -357,11 +357,11 @@ for (var i = 0; i &lt; sections.length; i++) {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("p").children()</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="filter">.filter()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.filter(selector)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -378,11 +378,11 @@ for (var i = 0; i &lt; sections.length; i++) {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("div").children().filter("p")</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="unique">.unique()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.unique()</code></pre>
 					<h3 class="doc-title">Return Value</h3>
@@ -394,11 +394,11 @@ for (var i = 0; i &lt; sections.length; i++) {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("p").parent().unique()</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="first">.first()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.first()</code></pre>
 					<h3 class="doc-title">Return Value</h3>
@@ -410,11 +410,11 @@ for (var i = 0; i &lt; sections.length; i++) {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("p").first()</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="last">.last()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.last()</code></pre>
 					<h3 class="doc-title">Return Value</h3>
@@ -426,11 +426,11 @@ for (var i = 0; i &lt; sections.length; i++) {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("p").last()</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="eq">.eq()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.eq(index)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -448,11 +448,11 @@ for (var i = 0; i &lt; sections.length; i++) {
 					<pre><code class="language-js">$(".header-title").eq(3)</code></pre>
 					<pre><code class="language-js">$(".header-title").eq(-1)</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="get">.get()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.get()</code></pre>
 					<h3 class="doc-title">Return Value</h3>
@@ -486,11 +486,11 @@ for (var i = 0; i &lt; sections.length; i++) {
 					<pre><code class="language-js">$(".header-title").get(3)</code></pre>
 					<pre><code class="language-js">$(".header-title").get(-1)</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="on">.on()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.on(eventName, handler)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -518,11 +518,11 @@ function changeColor() {
 	this.css("color", "#FF0000");
 }</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="off">.off()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.off(eventName)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -578,11 +578,11 @@ function changeColor() {
 	this.css("color", "#FF0000");
 }</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="trigger">.trigger()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.trigger(eventName)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -600,11 +600,11 @@ function changeColor() {
 					<pre><code class="language-js">$("button").trigger("click");</code></pre>
 					<pre><code class="language-js">$("a").trigger("customEvent");</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="hide">.hide()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.hide()</code></pre> Hides the elements and stores their previous display style. Style can be restored with <code class="language-js">.show()</code>.
 					<h3 class="doc-title">Return Value</h3>
@@ -616,11 +616,11 @@ function changeColor() {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("button").hide();</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="show">.show()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.show()</code></pre> Returns the elements to the display style that they had before <code class="language-js">.hide()</code> was called.
 					<h3 class="doc-title">Return Value</h3>
@@ -632,11 +632,11 @@ function changeColor() {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("button").show();</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="toggle">.toggle()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.toggle()</code></pre> Will show the element if it is hidden and hide the element if it's visible.
 					<h3 class="doc-title">Return Value</h3>
@@ -664,11 +664,11 @@ function changeColor() {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$(".title").toggle(true);</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="css">.css()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.css(property)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -710,11 +710,11 @@ function changeColor() {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("button").css("font-size", "35px");</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="html">.html()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.html()</code></pre>
 					<h3 class="doc-title">Return Value</h3>
@@ -749,11 +749,11 @@ function changeColor() {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("button").html("&lt;a href='index'&gt;Home&lt;/a&gt;");</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="outerHTML">.outerHTML()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.outerHTML()</code></pre>
 					<h3 class="doc-title">Return Value</h3>
@@ -793,11 +793,11 @@ function changeColor() {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("a").outerHTML("&lt;button&gt;I'm now a button!&lt;/button&gt;");</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="text">.text()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.text()</code></pre>
 					<h3 class="doc-title">Return Value</h3>
@@ -832,11 +832,11 @@ function changeColor() {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("button").text("Click me!");</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="attr">.attr()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.attr(attributeName)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -882,11 +882,11 @@ function changeColor() {
 				<div>
 					Often times <code class="language-js">.attr()</code> and <code class="language-js">.prop()</code> can be used interchangeably. In general, <code class="language-js">.attr()</code> should be used to get/set the value as literally written in the HTML document. <code class="language-js">.prop()</code> should be used to get/set the computed value as seen by JavaScript's DOM tree.
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="prop">.prop()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.prop(propertyName)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -933,11 +933,11 @@ function changeColor() {
 				<div>
 					Often times <code class="language-js">.attr()</code> and <code class="language-js">.prop()</code> can be used interchangeably. In general, <code class="language-js">.attr()</code> should be used to get/set the value as literally written in the HTML document. <code class="language-js">.prop()</code> should be used to get/set the computed value as seen by JavaScript's DOM tree.
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="addClass">.addClass()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.addClass(className)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -960,11 +960,11 @@ function changeColor() {
 					<pre><code class="language-js">$("button").addClass("large-button");</code></pre>
 					<pre><code class="language-js">$("button").addClass("large-button button-warning");</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="removeClass">.removeClass()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.removeClass(className)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -982,11 +982,11 @@ function changeColor() {
 					<pre><code class="language-js">$("button").removeClass("large-button");</code></pre>
 					<pre><code class="language-js">$("button").removeClass("large-button button-warning");</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="hasClass">.hasClass()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.hasClass(className)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -1021,11 +1021,11 @@ function changeColor() {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("button").hasClass("large-button", true);</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="insertAfter">.insertAfter()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.insertAfter(targetElement)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -1042,11 +1042,11 @@ function changeColor() {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("&lt;a&gt;").text("Click Me").insertAfter($("img"));</a></code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="after">.after()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.after(newElement)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -1063,11 +1063,11 @@ function changeColor() {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("img").after($("&lt;a&gt;").text("Click Me"));</a></code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="insertBefore">.insertBefore()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.insertBefore(targetElement)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -1084,11 +1084,11 @@ function changeColor() {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("&lt;a&gt;").text("Click Me").insertBefore($("img"));</a></code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="before">.before()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.before(newElement)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -1105,11 +1105,11 @@ function changeColor() {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("img").before($("&lt;a&gt;").text("Click Me"));</a></code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="appendChild">.appendChild()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.appendChild(childElement)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -1126,11 +1126,11 @@ function changeColor() {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("h3").appendChild($("&lt;img&gt;").attr("src", "banner.png"));</a></code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="remove">.remove()</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.remove()</code></pre> Will remove the calling LDOM Elements from the DOM.
 					<h3 class="doc-title">Return Value</h3>
@@ -1142,11 +1142,11 @@ function changeColor() {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("button").remove();</a></code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<section>
 			<h2 class="section-title" id="length">.length</h2>
-			<p>
+			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">.length</code></pre>
 					<h3 class="doc-title">Value</h3>
@@ -1159,12 +1159,13 @@ function changeColor() {
 					<pre><code class="language-js">$("section").length</code></pre>
 					<pre><code class="language-js">$("p").children().length</code></pre>
 				</div>
-			</p>
+			</div>
 		</section>
 		<footer>Copyright 2018 <a href="https://creativetechguy.com" target="_blank">Jason O'Neill</a></footer>
 	</main>
-	<script src="resources/prism.js"></script>
-	<script src="ldom.dev.js"></script>
+	<script src="resources/prism/prism.js"></script>
+	<script src="ldom.dev.js?v=3"></script>
+	<script src="resources/download.js"></script>
 	<script>
 		var nav = $("nav");
 		var navLinkDiv = nav.find("div");
@@ -1200,8 +1201,10 @@ function changeColor() {
 			}, true);
 		});
 
-		http("GET", "ldom.dev.js", {}, function (source) {
-			$("#download").attr("href", "data:text/plain;charset=utf-8," + encodeURIComponent(source)).attr("download", "ldom-dev.js");
+		http("GET", "ldom.dev.js?v=3", {}, function (source) {
+			$("#download").on("click", function(){
+				download("data:text/plain;charset=utf-8," + encodeURIComponent(source), "ldom.dev.js", "text/plain");
+			});
 		});
 
 		function http(method, path, data, callback) {
