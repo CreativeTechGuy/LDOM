@@ -130,11 +130,11 @@
 		</section>
 	</main>
 	<script src="resources/prism/prism.js"></script>
-	<script src="ldom.dev.js?v=3"></script>
+	<script src="ldom.dev.js?v=4"></script>
 	<script>
 		var alwaysActive = ["each", "find"];
 		var div = $("#ldomFunctions");
-		var keys = Object.keys(div);
+		var keys = Object.keys(Object.getPrototypeOf(div));
 		var sourceCode = "";
 
 
@@ -161,7 +161,7 @@
 			var trimmedSourceCode = sourceCode;
 			$("#ldomFunctions").find("input").each(function () {
 				if (!this.prop("checked") && alwaysActive.indexOf(this.attr("data-function-name")) === -1) {
-					trimmedSourceCode = trimmedSourceCode.replace(new RegExp("this\\." + this.attr("data-function-name") + " = " + this.attr("data-function-name") + ";", "g"), "");
+					trimmedSourceCode = trimmedSourceCode.replace(new RegExp("LDOM[a-zA-Z]*\\.prototype\\." + this.attr("data-function-name") + " = " + this.attr("data-function-name") + ";", "g"), "");
 					trimmedSourceCode = trimmedSourceCode.replace(this[this.attr("data-function-name")].toString(), "");
 				}
 			});
@@ -201,7 +201,7 @@
 	<script src="resources/blob.js"></script>
 	<script src="resources/FileSaver.js"></script>
 	<script>
-		http("GET", "ldom.dev.js?v=3", {}, function (source) {
+		http("GET", "ldom.dev.js?v=4", {}, function (source) {
 			sourceCode = source;
 			sourceCode = sourceReplace(sourceCode, "window.getLDOMFunctionUsage = ", "");
 			sourceCode = sourceReplace(sourceCode, getLDOMFunctionUsage.toString(), "");

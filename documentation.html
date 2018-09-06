@@ -1198,7 +1198,7 @@ function changeColor() {
 	<script src="resources/prism/prism.js"></script>
 	<script src="resources/blob.js"></script>
 	<script src="resources/FileSaver.js"></script>
-	<script src="ldom.dev.js?v=3"></script>
+	<script src="ldom.dev.js?v=4"></script>
 
 	<script>
 		var nav = $("nav");
@@ -1235,7 +1235,7 @@ function changeColor() {
 			}, true);
 		});
 
-		http("GET", "ldom.dev.js?v=3", {}, function (source) {
+		http("GET", "ldom.dev.js?v=4", {}, function (source) {
 			$("#download").on("click", function () {
 				saveAs(new Blob([source], { type: "text/plain;charset=utf-8" }), "ldom.dev.js");
 			});

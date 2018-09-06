@@ -11,25 +11,24 @@
 		} else if (input === window) {
 			return new LDOMWindowObject();
 		} else if (input === null || !isDefined(input)) {
-			return new LDOMObjectList([]);
+			return new LDOMObject([]);
 		} else if (isDefined(input.nodeType)) {
 			return new LDOMObject(input);
-		} else if (isDefined(input._LDOM)) {
-			return input;
 		} else if (Array.isArray(input)) {
 			var elements = [];
 			for (var i = 0; i < input.length; i++) {
 				elements.push($(input[i]));
 			}
-			return new LDOMObjectList(elements);
+			return new LDOMObject(elements);
 		} else {
 			return $(document).find(input);
 		}
 	}
+	window.LDOM = $;
 	window.$ = $;
 	window.getLDOMFunctionUsage = function() {
 		var obj = new LDOMObject(document.createElement("null"));
-		var keys = Object.keys(obj);
+		var keys = Object.keys(Object.getPrototypeOf(div));
 		var unused = [];
 		for (var i = 0; i < keys.length; i++) {
 			if (keys[i][0] !== "_" && !isDefined(LDOM.functionsUsed[keys[i]]) && typeof obj[keys[i]] === "function") {
@@ -40,7 +39,7 @@
 			used: Object.keys(LDOM.functionsUsed),
 			unused: unused
 		};
-	}
+	};
 
 	function LDOMObject(elem) {
 		if (isDefined(elem._LDOM)) {
@@ -50,72 +49,68 @@
 			return new LDOMObject(elem);
 		}
 		this._LDOM = true;
-		this.each = each;
-		this.equals = equals;
-		this.find = find;
-		this.get = get;
-		this.on = on;
-		this.off = off;
-		this.trigger = trigger;
-		this.hide = hide;
-		this.show = show;
-		this.toggle = toggle;
-		this.css = css;
-		this.html = html;
-		this.outerHTML = outerHTML;
-		this.text = text;
-		this.attr = attr;
-		this.prop = prop;
-		this.addClass = addClass;
-		this.removeClass = removeClass;
-		this.hasClass = hasClass;
-		this.parent = parent;
-		this.children = children;
-		this.filter = filter;
-		this.unique = unique;
-		this.first = first;
-		this.last = last;
-		this.eq = eq;
-		this.insertAfter = insertAfter;
-		this.after = after;
-		this.insertBefore = insertBefore;
-		this.before = before;
-		this.appendChild = appendChild;
-		this.remove = remove;
-		this.length = 1;
-		this.isList = false;
-		this.node = elem;
+		if (Array.isArray(elem)) {
+			this.length = elem.length;
+			this.isList = true;
+			this.elements = elem;
+		} else {
+			this.length = 1;
+			this.isList = false;
+			this.node = elem;
+		}
 	}
 
-	function LDOMObjectList(elems) {
-		if (!(this instanceof LDOMObjectList)) {
-			return new LDOMObjectList(elems);
-		}
-		var obj = new LDOMObject(document.createElement("null"));
-		var keys = Object.keys(obj);
-		for (var i = 0; i < keys.length; i++) {
-			this[keys[i]] = obj[keys[i]];
-		}
-		delete this.node;
-		this.elements = elems;
-		this.length = elems.length;
-		this.isList = true;
-	}
+	LDOMObject.prototype.each = each;
+	LDOMObject.prototype.equals = equals;
+	LDOMObject.prototype.find = find;
+	LDOMObject.prototype.get = get;
+	LDOMObject.prototype.on = on;
+	LDOMObject.prototype.off = off;
+	LDOMObject.prototype.trigger = trigger;
+	LDOMObject.prototype.hide = hide;
+	LDOMObject.prototype.show = show;
+	LDOMObject.prototype.toggle = toggle;
+	LDOMObject.prototype.css = css;
+	LDOMObject.prototype.html = html;
+	LDOMObject.prototype.outerHTML = outerHTML;
+	LDOMObject.prototype.text = text;
+	LDOMObject.prototype.attr = attr;
+	LDOMObject.prototype.prop = prop;
+	LDOMObject.prototype.addClass = addClass;
+	LDOMObject.prototype.removeClass = removeClass;
+	LDOMObject.prototype.hasClass = hasClass;
+	LDOMObject.prototype.parent = parent;
+	LDOMObject.prototype.children = children;
+	LDOMObject.prototype.filter = filter;
+	LDOMObject.prototype.unique = unique;
+	LDOMObject.prototype.first = first;
+	LDOMObject.prototype.last = last;
+	LDOMObject.prototype.eq = eq;
+	LDOMObject.prototype.insertAfter = insertAfter;
+	LDOMObject.prototype.after = after;
+	LDOMObject.prototype.insertBefore = insertBefore;
+	LDOMObject.prototype.before = before;
+	LDOMObject.prototype.appendChild = appendChild;
+	LDOMObject.prototype.remove = remove;
 
 	function LDOMWindowObject() {
 		if (!(this instanceof LDOMWindowObject)) {
 			return new LDOMWindowObject();
 		}
-		this.each = each;
-		this.get = get;
-		this.on = on;
-		this.off = off;
-		this.attr = attr;
-		this.prop = prop;
+		this._LDOM = true;
 		this.length = 1;
 		this.isList = false;
 		this.node = window;
 	}
+
+	LDOMWindowObject.prototype.each = each;
+	LDOMWindowObject.prototype.equals = equals;
+	LDOMWindowObject.prototype.get = get;
+	LDOMWindowObject.prototype.on = on;
+	LDOMWindowObject.prototype.off = off;
+	LDOMWindowObject.prototype.trigger = trigger;
+	LDOMWindowObject.prototype.attr = attr;
+	LDOMWindowObject.prototype.prop = prop;
 
 	function each(funct, reverse) {
 		LDOM.functionsUsed[arguments.callee.name] = true;
@@ -205,7 +200,7 @@
 		LDOM.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(event)) {
 			this.each(function() {
-				if (!isDefined(LDOM.eventListenerFunctions[eventName])){
+				if (!isDefined(LDOM.eventListenerFunctions[eventName])) {
 					return;
 				}
 				var event = Object.keys(LDOM.eventListenerFunctions[eventName]);
