@@ -88,7 +88,7 @@
 				<a class="large-button" href="customizer">Customize ldom.min.js</a>
 			</div>
 			<div class="p-like">
-				If you are familiar with jQuery, then LDOM will feel very similar. In many common use cases, LDOM can simply be a drop-in replacement to jQuery without any problems. One way that LDOM is so much smaller and faster than jQuery is that it doesn't support all of the ancient browsers that jQuery does. That being said, by using LDOM, here are the minimum browser versions that are supported. (Basically any browser since 2013)
+				If you are familiar with jQuery, then LDOM will feel very similar. In many common use cases, LDOM can simply be a drop-in replacement to jQuery without any problems. LDOM is able to startup over 10x faster due to it's small size and simple code. One way that LDOM is so much smaller and simpler than jQuery is that it doesn't support all of the ancient browsers that jQuery does. That being said, by using LDOM, here are the minimum browser versions that are supported. (Basically any browser since 2013)
 				<table>
 					<tr>
 						<th>Browser</th>
@@ -119,6 +119,27 @@
 						<td>12</td>
 					</tr>
 				</table>
+			</div>
+		</section>
+		<section>
+			<h2 class="section-title" id="ldom-vs-jquery">LDOM vs jQuery</h2>
+			<div class="p-like">
+				There is never one correct library for all situations. It's important to know the pros and cons to help you make the best decision for your use-case.<br>
+				<br>
+				<h4 class="doc-title">LDOM &gt; jQuery</h4>
+				<ul>
+					<li>Smaller library size allows for faster load times on slower networks.<br>(8% of the size of jQuery)</li>
+					<li>Smaller/simpler library enables faster parse/compile time and therefore your code will start sooner.<br>(10x faster startup time)</li>
+					<li>Customizable library lets you make the library even smaller if you don't want certain features.<br>(85% possible size reduction)</li>
+					<li>All LDOM code clearly maps to VanillaJS code. No complicated wrappers or replacements of default DOM behavior.</li>
+					<li>Better library source code readability.</li>
+					<li>Faster DOM Element creation.</li>
+				</ul>
+				<h4 class="doc-title">LDOM &lt; jQuery</h4>
+				<ul>
+					<li>Less browser support.</li>
+					<li>Slower performance in extremely heavy tasks.</li>
+				</ul>
 			</div>
 		</section>
 		<section>
