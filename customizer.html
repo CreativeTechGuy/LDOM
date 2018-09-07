@@ -206,7 +206,7 @@
 			sourceCode = sourceReplace(sourceCode, "window.getLDOMFunctionUsage = ", "");
 			sourceCode = sourceReplace(sourceCode, getLDOMFunctionUsage.toString(), "");
 			sourceCode = sourceReplace(sourceCode, "functionsUsed: {}", "");
-			sourceCode = sourceReplace(sourceCode, new RegExp("LDOM\\.functionsUsed\\[arguments\\.callee\\.name\\] = true;", "g"), "");
+			sourceCode = sourceReplace(sourceCode, new RegExp("LDOMCache\\.functionsUsed\\[arguments\\.callee\\.name\\] = true;", "g"), "");
 			generateDownloadLink(sourceCode);
 		});
 

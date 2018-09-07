@@ -1,5 +1,5 @@
 (function() {
-	var LDOM = {
+	var LDOMCache = {
 		eventListenerCounter: 0,
 		eventListenerFunctions: {},
 		functionsUsed: {}
@@ -10,9 +10,11 @@
 			return new LDOMObject(document.createElement(input.substring(1, input.length - 1)));
 		} else if (input === window) {
 			return new LDOMWindowObject();
-		} else if (input === null || !isDefined(input)) {
+		} else if (input === null || !input) {
 			return new LDOMObject([]);
-		} else if (isDefined(input.nodeType)) {
+		} else if (input._LDOM) {
+			return input;
+		} else if (input.nodeType) {
 			return new LDOMObject(input);
 		} else if (Array.isArray(input)) {
 			var elements = [];
@@ -31,23 +33,17 @@
 		var keys = Object.keys(Object.getPrototypeOf(div));
 		var unused = [];
 		for (var i = 0; i < keys.length; i++) {
-			if (keys[i][0] !== "_" && !isDefined(LDOM.functionsUsed[keys[i]]) && typeof obj[keys[i]] === "function") {
+			if (keys[i][0] !== "_" && !LDOMCache.functionsUsed[keys[i]] && typeof obj[keys[i]] === "function") {
 				unused.push(keys[i]);
 			}
 		}
 		return {
-			used: Object.keys(LDOM.functionsUsed),
+			used: Object.keys(LDOMCache.functionsUsed),
 			unused: unused
 		};
 	};
 
 	function LDOMObject(elem) {
-		if (isDefined(elem._LDOM)) {
-			return elem;
-		}
-		if (!(this instanceof LDOMObject)) {
-			return new LDOMObject(elem);
-		}
 		this._LDOM = true;
 		if (Array.isArray(elem)) {
 			this.length = elem.length;
@@ -94,9 +90,6 @@
 	LDOMObject.prototype.remove = remove;
 
 	function LDOMWindowObject() {
-		if (!(this instanceof LDOMWindowObject)) {
-			return new LDOMWindowObject();
-		}
 		this._LDOM = true;
 		this.length = 1;
 		this.isList = false;
@@ -113,7 +106,7 @@
 	LDOMWindowObject.prototype.prop = prop;
 
 	function each(funct, reverse) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		var thats = getThats(this);
 		var start = reverse ? thats.length - 1 : 0;
 		var change = reverse ? -1 : 1;
@@ -128,7 +121,7 @@
 	}
 
 	function equals(ldomObject) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		if (this.length !== ldomObject.length) {
 			return false;
 		}
@@ -146,7 +139,7 @@
 	}
 
 	function find(selector) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		var output = [];
 		this.each(function() {
 			var elems = this.node.querySelectorAll(selector);
@@ -158,7 +151,7 @@
 	}
 
 	function get(index) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(index)) {
 			var nodes = [];
 			this.each(function() {
@@ -181,29 +174,29 @@
 	}
 
 	function on(eventName, handler) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
-		var eventId = ++LDOM.eventListenerCounter;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
+		var eventId = ++LDOMCache.eventListenerCounter;
 		var handlerWrapper = function(evt) {
 			handler.apply($(this), [evt]);
 		};
 		this.each(function() {
 			this.node.addEventListener(eventName, handlerWrapper);
 		});
-		if (!isDefined(LDOM.eventListenerFunctions[eventName])) {
-			LDOM.eventListenerFunctions[eventName] = {};
+		if (!LDOMCache.eventListenerFunctions[eventName]) {
+			LDOMCache.eventListenerFunctions[eventName] = {};
 		}
-		LDOM.eventListenerFunctions[eventName][eventId] = handlerWrapper;
+		LDOMCache.eventListenerFunctions[eventName][eventId] = handlerWrapper;
 		return eventId;
 	}
 
 	function off(eventName, event) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(event)) {
 			this.each(function() {
-				if (!isDefined(LDOM.eventListenerFunctions[eventName])) {
+				if (!LDOMCache.eventListenerFunctions[eventName]) {
 					return;
 				}
-				var event = Object.keys(LDOM.eventListenerFunctions[eventName]);
+				var event = Object.keys(LDOMCache.eventListenerFunctions[eventName]);
 				for (var i = 0; i < event.length; i++) {
 					this.off(eventName, event[i]);
 				}
@@ -214,16 +207,16 @@
 			});
 		} else {
 			this.each(function() {
-				if (!isDefined(LDOM.eventListenerFunctions[eventName][event])) {
+				if (!LDOMCache.eventListenerFunctions[eventName][event]) {
 					return;
 				}
-				this.node.removeEventListener(eventName, LDOM.eventListenerFunctions[eventName][event]);
+				this.node.removeEventListener(eventName, LDOMCache.eventListenerFunctions[eventName][event]);
 			});
 		}
 	}
 
 	function trigger(eventName) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		var event = document.createEvent("Event");
 		event.initEvent(eventName, true, true);
 		this.each(function() {
@@ -233,7 +226,7 @@
 	}
 
 	function hide() {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
 			if (this.node.hasAttribute("LDOM_hidden")) {
 				return;
@@ -248,7 +241,7 @@
 	}
 
 	function show() {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
 			if (!this.node.hasAttribute("LDOM_hidden") && this.node.style.display !== "none") {
 				return;
@@ -265,7 +258,7 @@
 	}
 
 	function toggle(show) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
 			if (show === false) {
 				this.hide();
@@ -279,7 +272,7 @@
 	}
 
 	function css(property, value) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(value)) {
 			var thats = getThats(this);
 			return thats.length > 0 ? window.getComputedStyle(thats[0].node)[property] : "";
@@ -292,7 +285,7 @@
 	}
 
 	function html(htmlString) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(htmlString)) {
 			var thats = getThats(this);
 			return thats.length > 0 ? thats[0].node.innerHTML : "";
@@ -305,7 +298,7 @@
 	}
 
 	function outerHTML(htmlString) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(htmlString)) {
 			var thats = getThats(this);
 			return thats.length > 0 ? thats[0].node.outerHTML : "";
@@ -317,7 +310,7 @@
 	}
 
 	function text(textString) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(textString)) {
 			var thats = getThats(this);
 			return thats.length > 0 ? thats[0].node.innerText : "";
@@ -330,7 +323,7 @@
 	}
 
 	function attr(attributeName, value) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(value)) {
 			var thats = getThats(this);
 			return thats.length > 0 ? thats[0].node.getAttribute(attributeName) : "";
@@ -343,7 +336,7 @@
 	}
 
 	function prop(propertyName, value) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(value)) {
 			var thats = getThats(this);
 			return thats.length > 0 ? thats[0].node[propertyName] : "";
@@ -356,7 +349,7 @@
 	}
 
 	function addClass(className) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
 			var classes = (this.node.getAttribute("class") || "").split(" ");
 			var newClasses = className.split(" ");
@@ -371,7 +364,7 @@
 	}
 
 	function removeClass(className) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(className)) {
 			this.each(function() {
 				this.node.setAttribute("class", "");
@@ -393,7 +386,7 @@
 	}
 
 	function hasClass(className, all) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		var doesHaveClass = false;
 		this.each(function() {
 			var classes = (this.node.getAttribute("class") || "").split(" ");
@@ -413,7 +406,7 @@
 	}
 
 	function parent() {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		var output = [];
 		this.each(function() {
 			output.push(this.node.parentNode);
@@ -422,7 +415,7 @@
 	}
 
 	function children() {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		var output = [];
 		this.each(function() {
 			var elems = this.node.children;
@@ -434,7 +427,7 @@
 	}
 
 	function filter(selector) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		var frag = document.createDocumentFragment();
 		var indexCounter = 0;
 		this.each(function() {
@@ -452,7 +445,7 @@
 	}
 
 	function unique() {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		var output = [];
 		var thats = getThats(this);
 		var nodes = this.get();
@@ -465,17 +458,17 @@
 	}
 
 	function first() {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		return this.eq(0);
 	}
 
 	function last() {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		return this.eq(-1);
 	}
 
 	function eq(index) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		var thats = getThats(this);
 		if (thats.length === 0) {
 			return $([]);
@@ -490,7 +483,7 @@
 	}
 
 	function insertAfter(ldomObjectTarget) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
 			var callingNode = this.node;
 			ldomObjectTarget.each(function() {
@@ -501,7 +494,7 @@
 	}
 
 	function after(newElement) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
 			var callingNode = this.node;
 			newElement.each(function() {
@@ -512,7 +505,7 @@
 	}
 
 	function insertBefore(ldomObjectTarget) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
 			var callingNode = this.node;
 			ldomObjectTarget.each(function() {
@@ -523,7 +516,7 @@
 	}
 
 	function before(newElement) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
 			var callingNode = this.node;
 			newElement.each(function() {
@@ -534,7 +527,7 @@
 	}
 
 	function appendChild(childElement) {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
 			var callingNode = this.node;
 			childElement.each(function() {
@@ -546,7 +539,7 @@
 	}
 
 	function remove() {
-		LDOM.functionsUsed[arguments.callee.name] = true;
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
 			this.node.parentNode.removeChild(this.node);
 		});
