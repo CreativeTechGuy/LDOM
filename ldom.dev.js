@@ -2,6 +2,7 @@
 	var LDOMCache = {
 		eventListenerCounter: 0,
 		eventListenerFunctions: {},
+		eventListenerFunctionsIds: {},
 		functionsUsed: {}
 	};
 
@@ -90,6 +91,7 @@
 	LDOMObject.prototype.remove = remove;
 
 	function LDOMWindowObject() {
+		this._LDOMWindow = true;
 		this._LDOM = true;
 		this.length = 1;
 		this.isList = false;
@@ -181,36 +183,78 @@
 		};
 		this.each(function() {
 			this.node.addEventListener(eventName, handlerWrapper);
+			if (!this._LDOMWindow) {
+				var eventIds = JSON.parse(this.node.getAttribute("LDOM_evts") || "[]");
+				eventIds.push(eventId);
+				this.node.setAttribute("LDOM_evts", JSON.stringify(eventIds));
+			} else {
+				var eventIds = JSON.parse(this.node._LDOM_window_evts || "[]");
+				eventIds.push(eventId);
+				this.node._LDOM_window_evts = JSON.stringify(eventIds);
+			}
 		});
 		if (!LDOMCache.eventListenerFunctions[eventName]) {
 			LDOMCache.eventListenerFunctions[eventName] = {};
 		}
-		LDOMCache.eventListenerFunctions[eventName][eventId] = handlerWrapper;
+		LDOMCache.eventListenerFunctions[eventName][eventId] = {
+			funct: handlerWrapper,
+			count: this.length
+		};
+		LDOMCache.eventListenerFunctionsIds[eventId] = {
+			name: eventName
+		};
 		return eventId;
 	}
 
-	function off(eventName, event) {
+	function off(eventName, eventId) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
-		if (!isDefined(event)) {
+		if (!isDefined(eventName) && !isDefined(eventId)) {
+			this.each(function() {
+				if (!this._LDOMWindow) {
+					var eventIds = JSON.parse(this.node.getAttribute("LDOM_evts") || "[]");
+				} else {
+					var eventIds = JSON.parse(this.node._LDOM_window_evts || "[]");
+				}
+				for (var i = 0; i < eventIds.length; i++) {
+					this.off(LDOMCache.eventListenerFunctionsIds[eventIds[i]].name, eventIds[i]);
+				}
+			});
+		} else if (!isDefined(eventId)) {
 			this.each(function() {
 				if (!LDOMCache.eventListenerFunctions[eventName]) {
 					return;
 				}
-				var event = Object.keys(LDOMCache.eventListenerFunctions[eventName]);
-				for (var i = 0; i < event.length; i++) {
-					this.off(eventName, event[i]);
+				if (!this._LDOMWindow) {
+					var eventIds = JSON.parse(this.node.getAttribute("LDOM_evts") || "[]");
+				} else {
+					var eventIds = JSON.parse(this.node._LDOM_window_evts || "[]");
 				}
-			});
-		} else if (typeof event === "function") {
-			this.each(function() {
-				this.node.removeEventListener(eventName, event);
+				for (var i = 0; i < eventIds.length; i++) {
+					if (LDOMCache.eventListenerFunctionsIds[eventIds[i]].name === eventName) {
+						this.off(eventName, eventIds[i]);
+					}
+				}
 			});
 		} else {
 			this.each(function() {
-				if (!LDOMCache.eventListenerFunctions[eventName][event]) {
+				if (!LDOMCache.eventListenerFunctions[eventName][eventId]) {
 					return;
 				}
-				this.node.removeEventListener(eventName, LDOMCache.eventListenerFunctions[eventName][event]);
+				var event = LDOMCache.eventListenerFunctions[eventName][eventId];
+				this.node.removeEventListener(eventName, event.funct);
+				if (!this._LDOMWindow) {
+					var eventIds = JSON.parse(this.node.getAttribute("LDOM_evts") || "[]");
+					eventIds.splice(eventIds.indexOf(eventId), 1);
+					this.node.setAttribute("LDOM_evts", JSON.stringify(eventIds));
+				} else {
+					var eventIds = JSON.parse(this.node._LDOM_window_evts || "[]");
+					eventIds.splice(eventIds.indexOf(eventId), 1);
+					this.node._LDOM_window_evts = JSON.stringify(eventIds);
+				}
+				if (--event.count === 0) {
+					delete LDOMCache.eventListenerFunctions[eventName][eventId];
+					delete LDOMCache.eventListenerFunctionsIds[eventId];
+				}
 			});
 		}
 	}
@@ -541,6 +585,7 @@
 	function remove() {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
+			this.off();
 			this.node.parentNode.removeChild(this.node);
 		});
 		return this;
