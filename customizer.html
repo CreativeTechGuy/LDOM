@@ -130,7 +130,7 @@
 		</section>
 	</main>
 	<script src="resources/prism/prism.js"></script>
-	<script src="ldom.dev.js?v=4"></script>
+	<script src="ldom.dev.js?v=5"></script>
 	<script>
 		var alwaysActive = ["each", "find"];
 		var div = $("#ldomFunctions");
@@ -209,7 +209,7 @@
 	<script src="resources/blob.js"></script>
 	<script src="resources/FileSaver.js"></script>
 	<script>
-		http("GET", "ldom.dev.js?v=4", {}, function (source) {
+		http("GET", "ldom.dev.js?v=5", {}, function (source) {
 			sourceCode = source;
 			sourceCode = sourceReplace(sourceCode, "window.getLDOMFunctionUsage = ", "");
 			sourceCode = sourceReplace(sourceCode, getLDOMFunctionUsage.toString(), "");

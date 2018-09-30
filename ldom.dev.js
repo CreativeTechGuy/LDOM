@@ -585,7 +585,9 @@
 	function remove() {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
-			this.off();
+			if (this.off) {
+				this.off();
+			}
 			this.node.parentNode.removeChild(this.node);
 		});
 		return this;
