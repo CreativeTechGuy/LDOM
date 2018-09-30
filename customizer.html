@@ -163,18 +163,10 @@
 				if (!this.prop("checked") && alwaysActive.indexOf(this.attr("data-function-name")) === -1) {
 					trimmedSourceCode = trimmedSourceCode.replace(new RegExp("LDOM[a-zA-Z]*\\.prototype\\." + this.attr("data-function-name") + " = " + this.attr("data-function-name") + ";", "g"), "");
 					trimmedSourceCode = trimmedSourceCode.replace(this[this.attr("data-function-name")].toString(), "");
-					trimmedSourceCode = specialCases(trimmedSourceCode, this.attr("data-function-name"));
 				}
 			});
 			generateDownloadLink(trimmedSourceCode);
 		});
-
-		function specialCases(sourceCode, name){
-			if (name === "off"){
-				sourceCode = sourceCode.replace(new RegExp("this.off\\(\\)", "g"), "");
-			}
-			return sourceCode;
-		}
 
 		function http(method, path, data, callback) {
 			var xhttp = new XMLHttpRequest();
