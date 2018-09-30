@@ -1263,7 +1263,10 @@ function changeColor() {
 			var xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function () {
 				if (this.readyState === 4) {
-					callback(this.responseText);
+					var responseText = this.responseText;
+					setTimeout(function(){
+						callback(responseText);
+					}, 0);
 				}
 			};
 			var query = "";
