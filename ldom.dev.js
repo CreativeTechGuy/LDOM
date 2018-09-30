@@ -30,8 +30,8 @@
 	window.LDOM = $;
 	window.$ = $;
 	window.getLDOMFunctionUsage = function() {
-		var obj = new LDOMObject(document.createElement("null"));
-		var keys = Object.keys(Object.getPrototypeOf(div));
+		var obj = $("<null>");
+		var keys = Object.keys(Object.getPrototypeOf(obj));
 		var unused = [];
 		for (var i = 0; i < keys.length; i++) {
 			if (keys[i][0] !== "_" && !LDOMCache.functionsUsed[keys[i]] && typeof obj[keys[i]] === "function") {
