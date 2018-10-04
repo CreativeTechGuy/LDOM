@@ -885,6 +885,57 @@ function changeColor() {
 			</div>
 		</section>
 		<section>
+			<h2 class="section-title" id="prop">.prop()</h2>
+			<div class="p-like">
+				<div class="doc-box">
+					<pre><code class="language-js">.prop(propertyName)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>propertyName</dt>
+						<dd>Name of the HTML property to get.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>String</dt>
+						<dd>The element's HTML property value.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Information</h3>
+					<div>
+						If the LDOM Object contains multiple elements, this will only return the value of the first element. Use <code class="language-js">.eq()</code>, <code class="language-js">.first()</code> or <code class="language-js">.last()</code> to reduce to one element.
+					</div>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("input").prop("readOnly");</code></pre>
+					<pre><code class="language-js">$("input").last().prop("value");</code></pre>
+					<pre><code class="language-js">$("input").eq(2).prop("required");</code></pre>
+				</div>
+				<div class="doc-box">
+					<pre><code class="language-js">.prop(propertyName, value)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>propertyName</dt>
+						<dd>Name of the HTML property to set.</dd>
+						<dt>value</dt>
+						<dd>String containing the property value to set.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("input").prop("readOnly", "true");</code></pre>
+					<pre><code class="language-js">$("input").prop("value", "Enter Phone Number");</code></pre>
+				</div>
+				<h3 class="doc-title">Attr vs Prop</h3>
+				<div>
+					Often times <code class="language-js">.attr()</code> and <code class="language-js">.prop()</code> can be used interchangeably. In general, <code class="language-js">.attr()</code> should be used to get/set the value as literally written in the HTML document. <code class="language-js">.prop()</code> should be used to get/set the computed value as seen by JavaScript's DOM tree.
+				</div>
+			</div>
+		</section>
+		<section>
 			<h2 class="section-title" id="attr">.attr()</h2>
 			<div class="p-like">
 				<div class="doc-box">
@@ -935,39 +986,14 @@ function changeColor() {
 			</div>
 		</section>
 		<section>
-			<h2 class="section-title" id="prop">.prop()</h2>
+			<h2 class="section-title" id="removeAttr">.removeAttr()</h2>
 			<div class="p-like">
 				<div class="doc-box">
-					<pre><code class="language-js">.prop(propertyName)</code></pre>
+					<pre><code class="language-js">.removeAttr(attributeName)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
 					<dl>
-						<dt>propertyName</dt>
-						<dd>Name of the HTML property to get.</dd>
-					</dl>
-					<h3 class="doc-title">Return Value</h3>
-					<dl>
-						<dt>String</dt>
-						<dd>The element's HTML property value.</dd>
-					</dl>
-					<br>
-					<h3 class="doc-title">Information</h3>
-					<div>
-						If the LDOM Object contains multiple elements, this will only return the value of the first element. Use <code class="language-js">.eq()</code>, <code class="language-js">.first()</code> or <code class="language-js">.last()</code> to reduce to one element.
-					</div>
-					<br>
-					<h3 class="doc-title">Examples</h3>
-					<pre><code class="language-js">$("input").prop("readOnly");</code></pre>
-					<pre><code class="language-js">$("input").last().prop("value");</code></pre>
-					<pre><code class="language-js">$("input").eq(2).prop("required");</code></pre>
-				</div>
-				<div class="doc-box">
-					<pre><code class="language-js">.prop(propertyName, value)</code></pre>
-					<h3 class="doc-title">Parameters</h3>
-					<dl>
-						<dt>propertyName</dt>
-						<dd>Name of the HTML property to set.</dd>
-						<dt>value</dt>
-						<dd>String containing the property value to set.</dd>
+						<dt>attributeName</dt>
+						<dd>Name of the HTML attribute to remove.</dd>
 					</dl>
 					<h3 class="doc-title">Return Value</h3>
 					<dl>
@@ -976,12 +1002,7 @@ function changeColor() {
 					</dl>
 					<br>
 					<h3 class="doc-title">Examples</h3>
-					<pre><code class="language-js">$("input").prop("readOnly", "true");</code></pre>
-					<pre><code class="language-js">$("input").prop("value", "Enter Phone Number");</code></pre>
-				</div>
-				<h3 class="doc-title">Attr vs Prop</h3>
-				<div>
-					Often times <code class="language-js">.attr()</code> and <code class="language-js">.prop()</code> can be used interchangeably. In general, <code class="language-js">.attr()</code> should be used to get/set the value as literally written in the HTML document. <code class="language-js">.prop()</code> should be used to get/set the computed value as seen by JavaScript's DOM tree.
+					<pre><code class="language-js">$("button").removeAttr("disabled");</code></pre>
 				</div>
 			</div>
 		</section>
@@ -1264,7 +1285,7 @@ function changeColor() {
 			xhttp.onreadystatechange = function () {
 				if (this.readyState === 4) {
 					var responseText = this.responseText;
-					setTimeout(function(){
+					setTimeout(function () {
 						callback(responseText);
 					}, 0);
 				}

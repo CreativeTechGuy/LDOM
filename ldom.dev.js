@@ -71,8 +71,9 @@
 	LDOMObject.prototype.html = html;
 	LDOMObject.prototype.outerHTML = outerHTML;
 	LDOMObject.prototype.text = text;
-	LDOMObject.prototype.attr = attr;
 	LDOMObject.prototype.prop = prop;
+	LDOMObject.prototype.attr = attr;
+	LDOMObject.prototype.removeAttr = removeAttr;
 	LDOMObject.prototype.addClass = addClass;
 	LDOMObject.prototype.removeClass = removeClass;
 	LDOMObject.prototype.hasClass = hasClass;
@@ -104,8 +105,9 @@
 	LDOMWindowObject.prototype.on = on;
 	LDOMWindowObject.prototype.off = off;
 	LDOMWindowObject.prototype.trigger = trigger;
-	LDOMWindowObject.prototype.attr = attr;
 	LDOMWindowObject.prototype.prop = prop;
+	LDOMWindowObject.prototype.attr = attr;
+	LDOMWindowObject.prototype.removeAttr = removeAttr;
 
 	function each(funct, reverse) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
@@ -366,6 +368,19 @@
 		}
 	}
 
+	function prop(propertyName, value) {
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
+		if (!isDefined(value)) {
+			var thats = getThats(this);
+			return thats.length > 0 ? thats[0].node[propertyName] : "";
+		} else {
+			this.each(function() {
+				this.node[propertyName] = value;
+			});
+			return this;
+		}
+	}
+
 	function attr(attributeName, value) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(value)) {
@@ -379,17 +394,12 @@
 		}
 	}
 
-	function prop(propertyName, value) {
+	function removeAttr(attributeName) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
-		if (!isDefined(value)) {
-			var thats = getThats(this);
-			return thats.length > 0 ? thats[0].node[propertyName] : "";
-		} else {
-			this.each(function() {
-				this.node[propertyName] = value;
-			});
-			return this;
-		}
+		this.each(function() {
+			this.node.removeAttribute(attributeName);
+		});
+		return this;
 	}
 
 	function addClass(className) {
