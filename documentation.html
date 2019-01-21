@@ -1232,7 +1232,10 @@ function changeColor() {
 				</div>
 			</div>
 		</section>
-		<footer>Copyright 2018 <a href="https://creativetechguy.com" target="_blank">Jason O'Neill</a></footer>
+		<footer>Copyright <span id="copyrightYear"></span> <a href="https://creativetechguy.com" target="_blank">Jason O'Neill</a></footer>
+		<script>
+			document.getElementById("copyrightYear").innerText = new Date().getFullYear();
+		</script>
 	</main>
 	<script src="resources/prism/prism.js"></script>
 	<script src="resources/blob.js"></script>
