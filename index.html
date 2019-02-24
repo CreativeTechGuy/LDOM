@@ -6,12 +6,12 @@
 	<meta name="description" content="A Lightweight JavaScript library to interact with the browser DOM.">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=1">
-	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=1">
-	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=1">
-	<link rel="manifest" href="/site.webmanifest?v=1">
-	<link rel="mask-icon" href="/safari-pinned-tab.svg?v=1" color="#ff8800">
-	<link rel="shortcut icon" href="/favicon.ico?v=1">
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#ff8800">
+	<link rel="shortcut icon" href="/favicon.ico">
 	<meta name="apple-mobile-web-app-title" content="LDOM">
 	<meta name="application-name" content="LDOM">
 	<meta name="msapplication-TileColor" content="#da532c">
@@ -29,15 +29,9 @@
 	<meta name="twitter:image" content="http://lightweightdom.com/feather.png" />
 
 	<title>LDOM API Documentation</title>
-	<link href="resources/main.css?v=2" rel="stylesheet" />
-	<link href="resources/prism/prism.css?v=1" rel="stylesheet" />
-</head>
-<body>
-	<a href="https://github.com/CreativeTechGuy/LDOM" target="_blank" class="github-corner" aria-label="View source on Github" title="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
-			<path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
-			<path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
-			<path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
-		</svg></a>
+	<link href="resources/main.css" rel="stylesheet" />
+	<link href="resources/prism/prism.css" rel="stylesheet" />
+
 	<style>
 		.github-corner:hover .octo-arm {
 			animation: octocat-wave 560ms ease-in-out
@@ -71,9 +65,16 @@
 			}
 		}
 	</style>
-	<img id="menu" src="resources/menu.svg" />
+</head>
+<body>
+	<a href="https://github.com/CreativeTechGuy/LDOM" target="_blank" class="github-corner" aria-label="View source on Github" title="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+			<path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+			<path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+			<path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
+		</svg></a>
+	<img id="menu" src="resources/menu.svg" alt="Menu Open" />
 	<nav>
-		<img id="close" src="resources/close.svg" />
+		<img id="close" src="resources/close.svg" alt="Menu Close" />
 		<h3 class="nav-title">Menu</h3>
 		<div>
 
@@ -360,7 +361,7 @@ for (var i = 0; i &lt; sections.length; i++) {
 					</div>
 					<br>
 					<h3 class="doc-title">Examples</h3>
-					<pre><code class="language-js">$("div").children().filter("h1").equals($("div>h1"))</a></code></pre>
+					<pre><code class="language-js">$("div").children().filter("h1").equals($("div>h1"))</code></pre>
 				</div>
 			</div>
 		</section>
@@ -1111,7 +1112,7 @@ function changeColor() {
 					</dl>
 					<br>
 					<h3 class="doc-title">Examples</h3>
-					<pre><code class="language-js">$("&lt;a&gt;").text("Click Me").insertAfter($("img"));</a></code></pre>
+					<pre><code class="language-js">$("&lt;a&gt;").text("Click Me").insertAfter($("img"));</code></pre>
 				</div>
 			</div>
 		</section>
@@ -1132,7 +1133,7 @@ function changeColor() {
 					</dl>
 					<br>
 					<h3 class="doc-title">Examples</h3>
-					<pre><code class="language-js">$("img").after($("&lt;a&gt;").text("Click Me"));</a></code></pre>
+					<pre><code class="language-js">$("img").after($("&lt;a&gt;").text("Click Me"));</code></pre>
 				</div>
 			</div>
 		</section>
@@ -1153,7 +1154,7 @@ function changeColor() {
 					</dl>
 					<br>
 					<h3 class="doc-title">Examples</h3>
-					<pre><code class="language-js">$("&lt;a&gt;").text("Click Me").insertBefore($("img"));</a></code></pre>
+					<pre><code class="language-js">$("&lt;a&gt;").text("Click Me").insertBefore($("img"));</code></pre>
 				</div>
 			</div>
 		</section>
@@ -1174,7 +1175,7 @@ function changeColor() {
 					</dl>
 					<br>
 					<h3 class="doc-title">Examples</h3>
-					<pre><code class="language-js">$("img").before($("&lt;a&gt;").text("Click Me"));</a></code></pre>
+					<pre><code class="language-js">$("img").before($("&lt;a&gt;").text("Click Me"));</code></pre>
 				</div>
 			</div>
 		</section>
@@ -1195,7 +1196,7 @@ function changeColor() {
 					</dl>
 					<br>
 					<h3 class="doc-title">Examples</h3>
-					<pre><code class="language-js">$("h3").appendChild($("&lt;img&gt;").attr("src", "banner.png"));</a></code></pre>
+					<pre><code class="language-js">$("h3").appendChild($("&lt;img&gt;").attr("src", "banner.png"));</code></pre>
 				</div>
 			</div>
 		</section>
@@ -1211,7 +1212,7 @@ function changeColor() {
 					</dl>
 					<br>
 					<h3 class="doc-title">Examples</h3>
-					<pre><code class="language-js">$("button").remove();</a></code></pre>
+					<pre><code class="language-js">$("button").remove();</code></pre>
 				</div>
 			</div>
 		</section>
@@ -1240,7 +1241,7 @@ function changeColor() {
 	<script src="resources/prism/prism.js"></script>
 	<script src="resources/blob.js"></script>
 	<script src="resources/FileSaver.js"></script>
-	<script src="ldom.dev.js?v=5"></script>
+	<script src="ldom.dev.js"></script>
 
 	<script>
 		var nav = $("nav");
@@ -1277,7 +1278,7 @@ function changeColor() {
 			}, true);
 		});
 
-		http("GET", "ldom.dev.js?v=5", {}, function (source) {
+		http("GET", "ldom.dev.js", {}, function (source) {
 			$("#download").on("click", function () {
 				saveAs(new Blob([source], { type: "text/plain;charset=utf-8" }), "ldom.dev.js");
 			});
