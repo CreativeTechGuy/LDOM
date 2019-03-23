@@ -215,10 +215,14 @@
 		});
 
 		function generateDownloadLink(source) {
-			source = sourceReplace(source, new RegExp("LDOM_hidden_previous_display", "g"), "LDOM_hpd");
-			source = sourceReplace(source, new RegExp("LDOM_hidden", "g"), "LDOM_h");
+			source = sourceReplace(source, new RegExp("data-LDOM-events", "g"), "data-LDOM-e");
+			source = sourceReplace(source, new RegExp("data-LDOM-hidden-previous-display", "g"), "data-LDOM-hpd");
+			source = sourceReplace(source, new RegExp("data-LDOM-hidden", "g"), "data-LDOM-h");
 			source = sourceReplace(source, new RegExp("eventListenerCounter", "g"), "elc");
 			source = sourceReplace(source, new RegExp("eventListenerFunctions", "g"), "elf");
+			source = sourceReplace(source, new RegExp("_LDOMWindowEvents", "g"), "_LDOMwe");
+			source = sourceReplace(source, new RegExp("_LDOMWindow", "g"), "_LDOMw");
+
 			var result = minify(source);
 			if (result.error) {
 				failure();

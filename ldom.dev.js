@@ -186,13 +186,13 @@
 		this.each(function() {
 			this.node.addEventListener(eventName, handlerWrapper);
 			if (!this._LDOMWindow) {
-				var eventIds = JSON.parse(this.node.getAttribute("LDOM_evts") || "[]");
+				var eventIds = JSON.parse(this.node.getAttribute("data-LDOM-events") || "[]");
 				eventIds.push(eventId);
-				this.node.setAttribute("LDOM_evts", JSON.stringify(eventIds));
+				this.node.setAttribute("data-LDOM-events", JSON.stringify(eventIds));
 			} else {
-				var eventIds = JSON.parse(this.node._LDOM_window_evts || "[]");
+				var eventIds = JSON.parse(this.node._LDOMWindowEvents || "[]");
 				eventIds.push(eventId);
-				this.node._LDOM_window_evts = JSON.stringify(eventIds);
+				this.node._LDOMWindowEvents = JSON.stringify(eventIds);
 			}
 		});
 		if (!LDOMCache.eventListenerFunctions[eventName]) {
@@ -213,9 +213,9 @@
 		if (!isDefined(eventName) && !isDefined(eventId)) {
 			this.each(function() {
 				if (!this._LDOMWindow) {
-					var eventIds = JSON.parse(this.node.getAttribute("LDOM_evts") || "[]");
+					var eventIds = JSON.parse(this.node.getAttribute("data-LDOM-events") || "[]");
 				} else {
-					var eventIds = JSON.parse(this.node._LDOM_window_evts || "[]");
+					var eventIds = JSON.parse(this.node._LDOMWindowEvents || "[]");
 				}
 				for (var i = 0; i < eventIds.length; i++) {
 					this.off(LDOMCache.eventListenerFunctionsIds[eventIds[i]].name, eventIds[i]);
@@ -227,9 +227,9 @@
 					return;
 				}
 				if (!this._LDOMWindow) {
-					var eventIds = JSON.parse(this.node.getAttribute("LDOM_evts") || "[]");
+					var eventIds = JSON.parse(this.node.getAttribute("data-LDOM-events") || "[]");
 				} else {
-					var eventIds = JSON.parse(this.node._LDOM_window_evts || "[]");
+					var eventIds = JSON.parse(this.node._LDOMWindowEvents || "[]");
 				}
 				for (var i = 0; i < eventIds.length; i++) {
 					if (LDOMCache.eventListenerFunctionsIds[eventIds[i]].name === eventName) {
@@ -245,13 +245,13 @@
 				var event = LDOMCache.eventListenerFunctions[eventName][eventId];
 				this.node.removeEventListener(eventName, event.funct);
 				if (!this._LDOMWindow) {
-					var eventIds = JSON.parse(this.node.getAttribute("LDOM_evts") || "[]");
+					var eventIds = JSON.parse(this.node.getAttribute("data-LDOM-events") || "[]");
 					eventIds.splice(eventIds.indexOf(eventId), 1);
-					this.node.setAttribute("LDOM_evts", JSON.stringify(eventIds));
+					this.node.setAttribute("data-LDOM-events", JSON.stringify(eventIds));
 				} else {
-					var eventIds = JSON.parse(this.node._LDOM_window_evts || "[]");
+					var eventIds = JSON.parse(this.node._LDOMWindowEvents || "[]");
 					eventIds.splice(eventIds.indexOf(eventId), 1);
-					this.node._LDOM_window_evts = JSON.stringify(eventIds);
+					this.node._LDOMWindowEvents = JSON.stringify(eventIds);
 				}
 				if (--event.count === 0) {
 					delete LDOMCache.eventListenerFunctions[eventName][eventId];
@@ -274,12 +274,12 @@
 	function hide() {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
-			if (this.node.hasAttribute("LDOM_hidden")) {
+			if (this.node.hasAttribute("data-LDOM-hidden")) {
 				return;
 			}
-			this.node.setAttribute("LDOM_hidden", true);
+			this.node.setAttribute("data-LDOM-hidden", true);
 			if (this.node.style.display !== "") {
-				this.node.setAttribute("LDOM_hidden_previous_display", this.node.style.display);
+				this.node.setAttribute("data-LDOM-hidden-previous-display", this.node.style.display);
 			}
 			this.node.style.display = "none";
 		});
@@ -289,16 +289,16 @@
 	function show() {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
-			if (!this.node.hasAttribute("LDOM_hidden") && this.node.style.display !== "none") {
+			if (!this.node.hasAttribute("data-LDOM-hidden") && this.node.style.display !== "none") {
 				return;
 			}
-			if (this.node.hasAttribute("LDOM_hidden_previous_display")) {
-				this.node.style.display = this.node.getAttribute("LDOM_hidden_previous_display");
-				this.node.removeAttribute("LDOM_hidden_previous_display");
+			if (this.node.hasAttribute("data-LDOM-hidden-previous-display")) {
+				this.node.style.display = this.node.getAttribute("data-LDOM-hidden-previous-display");
+				this.node.removeAttribute("data-LDOM-hidden-previous-display");
 			} else {
 				this.node.style.display = "";
 			}
-			this.node.removeAttribute("LDOM_hidden");
+			this.node.removeAttribute("data-LDOM-hidden");
 		});
 		return this;
 	}
@@ -308,7 +308,7 @@
 		this.each(function() {
 			if (show === false) {
 				this.hide();
-			} else if (this.node.hasAttribute("LDOM_hidden") || show) {
+			} else if (this.node.hasAttribute("data-LDOM-hidden") || show) {
 				this.show();
 			} else {
 				this.hide();
