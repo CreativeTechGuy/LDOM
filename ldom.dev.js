@@ -278,7 +278,7 @@
 				return;
 			}
 			this.node.setAttribute("data-LDOM-hidden", true);
-			if (this.node.style.display !== "") {
+			if (this.node.style.display !== "" && this.node.style.display !== "none") {
 				this.node.setAttribute("data-LDOM-hidden-previous-display", this.node.style.display);
 			}
 			this.node.style.display = "none";
