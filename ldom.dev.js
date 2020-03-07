@@ -275,10 +275,15 @@
 			if (this.node.style.display === "none") {
 				return;
 			}
+			var isImportant = false;
 			if (this.node.style.display !== "") {
 				this.node.setAttribute("data-LDOM-hidden-previous-display", this.node.style.display);
+				if (this.node.style.getPropertyPriority("display") === "important") {
+					this.node.setAttribute("data-LDOM-hidden-previous-display-important", "true");
+					isImportant = true;
+				}
 			}
-			this.node.style.display = "none";
+			this.node.style.setProperty("display", "none", isImportant);
 		});
 		return this;
 	}
@@ -287,8 +292,9 @@
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
 			if (this.node.hasAttribute("data-LDOM-hidden-previous-display")) {
-				this.node.style.display = this.node.getAttribute("data-LDOM-hidden-previous-display");
+				this.node.style.setAttribute("display", this.node.getAttribute("data-LDOM-hidden-previous-display"), this.node.hasAttribute("data-LDOM-hidden-previous-display-important") ? "important" : "");
 				this.node.removeAttribute("data-LDOM-hidden-previous-display");
+				this.node.removeAttribute("data-LDOM-hidden-previous-display-important");
 			} else if (this.node.style.display === "none") {
 				this.node.style.display = "";
 			}
@@ -299,8 +305,11 @@
 	function toggle(show) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
-			show = this.node.hasAttribute("data-LDOM-hidden-previous-display") || this.node.style.display === "none";
-			if (show) {
+			var shouldShow = this.node.hasAttribute("data-LDOM-hidden-previous-display") || this.node.style.display === "none";
+			if (isDefined(show)) {
+				shouldShow = show;
+			}
+			if (shouldShow) {
 				this.show()
 			} else {
 				this.hide();
@@ -309,14 +318,14 @@
 		return this;
 	}
 
-	function css(property, value) {
+	function css(property, value, isImportant) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(value)) {
 			var thats = getThats(this);
 			return thats.length > 0 ? window.getComputedStyle(thats[0].node)[property] : "";
 		} else {
 			this.each(function() {
-				this.node.style[property] = value;
+				this.node.style.setProperty(property, value, isImportant ? "important" : "");
 			});
 			return this;
 		}
@@ -508,25 +517,30 @@
 
 	function first() {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
-		return this.eq(0);
+		var thats = getThats(this);
+		if (thats.length === 0) {
+			return null;
+		}
+		return thats[0];
 	}
 
 	function last() {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
-		return this.eq(-1);
+		var thats = getThats(this);
+		if (thats.length === 0) {
+			return null;
+		}
+		return thats[thats.length - 1];
 	}
 
 	function eq(index) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		var thats = getThats(this);
-		if (thats.length === 0) {
-			return $([]);
-		}
-		if (thats.length === 1) {
-			index = 0;
-		}
 		if (index < 0) {
-			index = Math.floor((thats.length - index) / thats.length) * thats.length - 1;
+			index = thats.length + index;
+		}
+		if (!isDefined(thats[index])) {
+			return null;
 		}
 		return thats[index];
 	}

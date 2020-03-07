@@ -458,6 +458,11 @@ for (var i = 0; i &lt; sections.length; i++) {
 						<dd>A new LDOM Object containing only the first element.</dd>
 					</dl>
 					<br>
+					<h3 class="doc-title">Information</h3>
+					<div>
+						Will return <code class="language-js">null</code> if the object contains zero elements.
+					</div>
+					<br>
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("p").first()</code></pre>
 				</div>
@@ -473,6 +478,11 @@ for (var i = 0; i &lt; sections.length; i++) {
 						<dt>LDOM Object</dt>
 						<dd>A new LDOM Object containing only the last element.</dd>
 					</dl>
+					<br>
+					<h3 class="doc-title">Information</h3>
+					<div>
+						Will return <code class="language-js">null</code> if the object contains zero elements.
+					</div>
 					<br>
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("p").last()</code></pre>
@@ -494,6 +504,11 @@ for (var i = 0; i &lt; sections.length; i++) {
 						<dt>LDOM Object</dt>
 						<dd>A new LDOM Object containing only the first element.</dd>
 					</dl>
+					<br>
+					<h3 class="doc-title">Information</h3>
+					<div>
+						Will return <code class="language-js">null</code> if there is no element at the specified index.
+					</div>
 					<br>
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$(".header-title").eq(3)</code></pre>
@@ -530,7 +545,7 @@ for (var i = 0; i &lt; sections.length; i++) {
 					<br>
 					<h3 class="doc-title">Information</h3>
 					<div>
-						Will return <code class="language-js">null</code> if the LDOM Object contains no elements.
+						Will return <code class="language-js">null</code> if there is no element at the specified index.
 					</div>
 					<br>
 					<h3 class="doc-title">Examples</h3>
@@ -769,6 +784,26 @@ function changeColor() {
 					<br>
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("button").css("font-size", "35px");</code></pre>
+				</div>
+				<div class="doc-box">
+					<pre><code class="language-js">.css(property, value, isImportant)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>property</dt>
+						<dd>Name of the CSS property to set.</dd>
+						<dt>value</dt>
+						<dd>The value to set the CSS property to.</dd>
+						<dt>isImportant</dt>
+						<dd>If true, the style will be marked with "!important" specificity.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").css("display", "inline-block", true);</code></pre>
 				</div>
 			</div>
 		</section>

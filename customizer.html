@@ -216,6 +216,7 @@
 		});
 
 		function generateDownloadLink(source) {
+			source = sourceReplace(source, new RegExp("data-LDOM-hidden-previous-display-important", "g"), "data-LDOM-hpdi");
 			source = sourceReplace(source, new RegExp("data-LDOM-hidden-previous-display", "g"), "data-LDOM-hpd");
 			source = sourceReplace(source, new RegExp("eventListenerCounter", "g"), "elc");
 			source = sourceReplace(source, new RegExp("eventListenerFunctions", "g"), "elf");
