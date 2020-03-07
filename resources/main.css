@@ -1,3 +1,7 @@
+* {
+	box-sizing: border-box;
+}
+
 body {
 	font-size: 1.2em;
 	overflow-y: scroll;
@@ -31,7 +35,6 @@ nav {
 	height: 100%;
 	border: 1px solid #000000;
 	display: block;
-	box-sizing: border-box;
 	position: fixed;
 	overflow-y: auto;
 	background: #ffefdc;
@@ -60,7 +63,6 @@ nav {
 
 main {
 	display: block;
-	box-sizing: border-box;
 	padding: 0.5em 1em;
 }
 
@@ -112,6 +114,7 @@ code[class*="language-"] {
 	border: 0;
 	box-shadow: 2px 2px 5px #000000;
 	cursor: pointer;
+	-webkit-transition: background 0.25s;
 	transition: background 0.25s;
 	text-decoration: none;
 	width: 10em;
@@ -132,8 +135,6 @@ code[class*="language-"] {
 #menu {
 	display: none;
 	position: fixed;
-	height: 2em;
-	width: 2em;
 	padding: 0.7em;
 	z-index: 998;
 	cursor: pointer;
@@ -169,6 +170,7 @@ th {
 }
 
 .menu-viewing-highlight {
+	-webkit-transition: background 0.5s;
 	transition: background 0.5s;
 	border: 1px solid #ff8800;
 	background: rgba(255, 119, 0, 0.445) !important;

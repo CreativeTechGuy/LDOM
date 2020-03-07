@@ -2,7 +2,7 @@
 
 A Lightweight JavaScript library to interact with the browser DOM.
 
-Full documentation, customizers, downloaders and examples available at [lightweightdom.com](http://lightweightdom.com).
+Full documentation, customizers, downloaders and examples available at [lightweightdom.com](https://lightweightdom.com).
 
 <h2 align="center">Getting Started</h2>
 
@@ -101,4 +101,4 @@ for (var i = 0; i < buttons.length; i++) {
 ---
 
 ## Like what you see so far?
-## Full documentation, customizers, downloaders and examples available at [lightweightdom.com](http://lightweightdom.com).
+## Full documentation, customizers, downloaders and examples available at [lightweightdom.com](https://lightweightdom.com).

@@ -54,16 +54,6 @@
 				transform: rotate(10deg)
 			}
 		}
-
-		@media (max-width:500px) {
-			.github-corner:hover .octo-arm {
-				animation: none
-			}
-
-			.github-corner .octo-arm {
-				animation: octocat-wave 560ms ease-in-out
-			}
-		}
 	</style>
 </head>
 <body>
@@ -138,9 +128,9 @@
 					<li>Smaller library size allows for faster load times on slower networks.<br>(8% of the size of jQuery)</li>
 					<li>Smaller/simpler library enables faster parse/compile time and therefore your code will start sooner.<br>(10x faster startup time)</li>
 					<li>Customizable library lets you make the library even smaller if you don't want certain features.<br>(85% possible size reduction)</li>
+					<li>Faster DOM Element creation.</li>
 					<li>All LDOM code clearly maps to VanillaJS code. No complicated wrappers or replacements of default DOM behavior.</li>
 					<li>Better library source code readability.</li>
-					<li>Faster DOM Element creation.</li>
 				</ul>
 				<h4 class="doc-title">LDOM &lt; jQuery</h4>
 				<ul>
@@ -212,7 +202,7 @@ for (var i = 0; i &lt; buttons.length; i++) {
 				<h4 class="doc-title">LDOM</h4>
 				<pre><code class="language-js">var nav = $("nav");
 $("section").each(function () {
-	var header = this.children().filter(".section-title").first();
+	var header = this.find(".section-title").first();
 	nav.appendChild($("&lt;a&gt;").addClass("nav-link").prop("href", "#" + header.attr("id")).text(header.text()));
 });</code></pre>
 				<h4 class="doc-title">Vanilla JavaScript</h4>
@@ -237,7 +227,7 @@ for (var i = 0; i &lt; sections.length; i++) {
 			<h3>As you can see, LDOM is an extremely powerful DOM manipulation tool.</h3>
 		</section>
 		<section>
-			<h2 class="section-title" id="ldom-object">$(...)</h2>
+			<h2 class="section-title" id="constructor">$(...)</h2>
 			<div class="p-like">
 				<div class="doc-box">
 					<pre><code class="language-js">$(selector)</code></pre>
@@ -518,8 +508,8 @@ for (var i = 0; i &lt; sections.length; i++) {
 					<pre><code class="language-js">.get()</code></pre>
 					<h3 class="doc-title">Return Value</h3>
 					<dl>
-						<dt>DOM Element List</dt>
-						<dd>A list of vanilla DOM Elements from the LDOM Object.</dd>
+						<dt>DOM Element Array</dt>
+						<dd>An array of vanilla DOM Elements from the LDOM Object.</dd>
 					</dl>
 					<br>
 					<h3 class="doc-title">Examples</h3>
@@ -613,13 +603,11 @@ function changeColor() {
 					<pre><code class="language-js">$("a").off("customEvent");</code></pre>
 				</div>
 				<div class="doc-box">
-					<pre><code class="language-js">.off(eventName, eventId)</code></pre>
+					<pre><code class="language-js">.off(eventId)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
 					<dl>
-						<dt>eventName</dt>
-						<dd>The event type you want to remove the specified handler for.</dd>
 						<dt>eventId</dt>
-						<dd>The ID of the event to remove.</dd>
+						<dd>The ID returned from .on() of the event to remove.</dd>
 					</dl>
 					<h3 class="doc-title">Return Value</h3>
 					<dl>
@@ -628,7 +616,7 @@ function changeColor() {
 					</dl>
 					<br>
 					<h3 class="doc-title">Examples</h3>
-					<pre><code class="language-js">$("button").off("click", buttonClickEventId);</code></pre>
+					<pre><code class="language-js">$("button").off(buttonClickEventId);</code></pre>
 				</div>
 			</div>
 		</section>
@@ -651,6 +639,25 @@ function changeColor() {
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("button").trigger("click");</code></pre>
 					<pre><code class="language-js">$("a").trigger("customEvent");</code></pre>
+				</div>
+				<div class="doc-box">
+					<pre><code class="language-js">.trigger(eventName, data)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>eventName</dt>
+						<dd>The event type to send.</dd>
+						<dt>data</dt>
+						<dd>An object of data to attach to the event.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").trigger("click", { x: 10, y: 25 });</code></pre>
+					<pre><code class="language-js">$("a").trigger("customEvent", { arr: [1, 5, 10] });</code></pre>
 				</div>
 			</div>
 		</section>
@@ -690,7 +697,8 @@ function changeColor() {
 			<h2 class="section-title" id="toggle">.toggle()</h2>
 			<div class="p-like">
 				<div class="doc-box">
-					<pre><code class="language-js">.toggle()</code></pre> Will show the element if it is hidden and hide the element if it's visible.
+					<pre><code class="language-js">.toggle()</code></pre>
+					Will show the matching elements if it's hidden or hide if it's visible.
 					<h3 class="doc-title">Return Value</h3>
 					<dl>
 						<dt>LDOM Object</dt>
@@ -701,7 +709,7 @@ function changeColor() {
 					<pre><code class="language-js">$("button").toggle();</code></pre>
 				</div>
 				<div class="doc-box">
-					<pre><code class="language-js">.toggle(show)</code></pre> Will show the element if it is hidden and hide the element if it's visible.
+					<pre><code class="language-js">.toggle(show)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
 					<dl>
 						<dt>show</dt>
@@ -1024,11 +1032,6 @@ function changeColor() {
 						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
 					</dl>
 					<br>
-					<h3 class="doc-title">Information</h3>
-					<div>
-						Classes will only be added if they are not already present on the element.
-					</div>
-					<br>
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("button").addClass("large-button");</code></pre>
 					<pre><code class="language-js">$("button").addClass("large-button button-warning");</code></pre>
@@ -1038,6 +1041,19 @@ function changeColor() {
 		<section>
 			<h2 class="section-title" id="removeClass">.removeClass()</h2>
 			<div class="p-like">
+				<div class="doc-box">
+					<pre><code class="language-js">.removeClass()</code></pre>
+					Will remove all classes from the matching elements.
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("button").removeClass("large-button");</code></pre>
+					<pre><code class="language-js">$("button").removeClass("large-button button-warning");</code></pre>
+				</div>
 				<div class="doc-box">
 					<pre><code class="language-js">.removeClass(className)</code></pre>
 					<h3 class="doc-title">Parameters</h3>
@@ -1247,31 +1263,39 @@ function changeColor() {
 	<script>
 		var nav = $("nav");
 		var navLinkDiv = nav.find("div");
-		$("section").each(function () {
-			var header = this.children().filter(".section-title").first();
+		$("section").each(function() {
+			var header = this.find(".section-title").first();
 			var id = header.attr("id");
 			navLinkDiv.appendChild($("<a>").addClass("nav-link").attr("href", "#" + id).text(header.text()));
 			header.html($("<a>").attr("href", "#" + id).text(header.text()).outerHTML());
 		});
 
-		$("#menu").on("click", function () {
+		$("#menu").on("click", function() {
 			nav.css("display", "block");
 		});
-		$("#close").on("click", function () {
+		$("#close").on("click", function() {
 			nav.css("display", "");
 		});
-		$(".nav-link").on("click", function () {
+		$(".nav-link").on("click", function() {
 			$("#close").trigger("click");
 		});
-		$(window).on("scroll", function () {
+		$(window).on("scroll", function() {
 			var y = this.prop("scrollY") + this.prop("innerHeight") / 2;
-			$(".section-title[id]").each(function () {
+			$(".section-title[id]").each(function() {
 				if (y > this.prop("offsetTop")) {
 					var link = $(".nav-link[href='#" + this.attr("id") + "']");
 					if (!$(".menu-viewing-highlight").equals(link)) {
 						$(".menu-viewing-highlight").removeClass("menu-viewing-highlight");
 						link.addClass("menu-viewing-highlight");
-						nav.prop("scrollTop", link.prop("offsetTop") - nav.prop("clientHeight") / 2);
+						var offsetTop = link.prop("offsetTop");
+						var navScrollY = nav.prop("scrollTop");
+						var navHeight = nav.prop("clientHeight");
+						var linkHeight = link.prop("clientHeight");
+						if (offsetTop < navScrollY) {
+							nav.prop("scrollTop", offsetTop);
+						} else if (offsetTop + 10 > navScrollY + navHeight) {
+							nav.prop("scrollTop", offsetTop - navHeight + linkHeight);
+						}
 						history.replaceState({}, document.title, "#" + this.attr("id"));
 					}
 					return false;
@@ -1279,28 +1303,32 @@ function changeColor() {
 			}, true);
 		});
 
-		http("GET", "ldom.dev.js", {}, function (source) {
-			$("#download").on("click", function () {
-				saveAs(new Blob([source], { type: "text/plain;charset=utf-8" }), "ldom.dev.js");
+		http("GET", "ldom.dev.js", {}, function(source) {
+			$("#download").on("click", function() {
+				saveAs(new Blob([source], {
+					type: "text/plain;charset=utf-8"
+				}), "ldom.dev.js");
 			});
 		});
 
 		function http(method, path, data, callback) {
 			var xhttp = new XMLHttpRequest();
-			xhttp.onreadystatechange = function () {
+			xhttp.onreadystatechange = function() {
 				if (this.readyState === 4) {
 					var responseText = this.responseText;
-					setTimeout(function () {
+					setTimeout(function() {
 						callback(responseText);
 					}, 0);
 				}
 			};
 			var query = "";
 			var dataKeys = Object.keys(data);
-			for (var i = 0; i < dataKeys.length; i++)
+			for (var i = 0; i < dataKeys.length; i++) {
 				query += dataKeys[i] + "=" + data[dataKeys[i]] + "&";
-			if (dataKeys.length > 0)
+			}
+			if (dataKeys.length > 0) {
 				query = query.substring(0, query.length - 1);
+			}
 			xhttp.open(method, path, true);
 			xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			xhttp.send(query);
