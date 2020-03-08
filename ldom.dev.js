@@ -283,7 +283,7 @@
 					isImportant = true;
 				}
 			}
-			this.node.style.setProperty("display", "none", isImportant);
+			this.node.style.setProperty("display", "none", isImportant ? "important" : "");
 		});
 		return this;
 	}
@@ -292,7 +292,7 @@
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
 			if (this.node.hasAttribute("data-LDOM-hidden-previous-display")) {
-				this.node.style.setAttribute("display", this.node.getAttribute("data-LDOM-hidden-previous-display"), this.node.hasAttribute("data-LDOM-hidden-previous-display-important") ? "important" : "");
+				this.node.style.setProperty("display", this.node.getAttribute("data-LDOM-hidden-previous-display"), this.node.hasAttribute("data-LDOM-hidden-previous-display-important") ? "important" : "");
 				this.node.removeAttribute("data-LDOM-hidden-previous-display");
 				this.node.removeAttribute("data-LDOM-hidden-previous-display-important");
 			} else if (this.node.style.display === "none") {
