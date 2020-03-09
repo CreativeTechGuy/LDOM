@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="robots" content="noindex">
+	<title>LDOM Tests</title>
+
+	<style>
+		summary {
+			cursor: pointer;
+		}
+
+		.method-name {
+			font-weight: bold;
+			display: inline-block;
+		}
+
+		.test-stats {
+			margin-left: 1em;
+			font-weight: bold;
+		}
+
+		#testContainer {
+			display: none;
+			font-size: 15px;
+		}
+
+		.test-success {
+			color: green;
+		}
+
+		.test-success::after {
+			content: "⭐";
+		}
+
+		.test-fail {
+			color: red;
+		}
+
+		.test-fail::after {
+			content: "❌";
+		}
+
+		.test-case {
+			margin-left: 3em;
+		}
+	</style>
+</head>
+<body>
+	<h1>LDOM Tests</h1>
+	<div>
+		<div class="method-name">Aggregate Tests Results:</div>
+		<span class="test-stats">
+			<span id="aggregate-successCount">-</span> / <span id="aggregate-totalCount">-</span>
+		</span>
+	</div>
+	<br>
+	<div id="testOutput"></div>
+	<br>
+	<br>
+	<div id="testContainer">
+		<span class="abc">aBc</span>
+		<div>
+			<div class="abc">Some text</div>
+			<div>
+				<table id="tableID">
+					<tr>
+						<th>Head 1</th>
+						<th>Item 0</th>
+					</tr>
+					<tr>
+						<td>Row 1</td>
+						<td>Item 1</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<script src="../ldom.dev.js"></script>
+	<script src="script.js"></script>
+</body>
+</html>
