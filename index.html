@@ -69,7 +69,10 @@
 		<div>
 
 		</div>
-		<footer>Copyright 2018 <a href="https://creativetechguy.com" target="_blank">Jason O'Neill</a></footer>
+		<footer>Copyright <span id="copyrightYearNav"></span> <a href="https://creativetechguy.com" target="_blank">Jason O'Neill</a></footer>
+		<script>
+			document.getElementById("copyrightYearNav").innerText = new Date().getFullYear();
+		</script>
 	</nav>
 	<main>
 		<header>

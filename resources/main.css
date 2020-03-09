@@ -135,7 +135,9 @@ code[class*="language-"] {
 #menu {
 	display: none;
 	position: fixed;
-	padding: 0.7em;
+	height: 1.25em;
+	width: 1.25em;
+	margin: 0.7em;
 	z-index: 998;
 	cursor: pointer;
 }
@@ -143,9 +145,9 @@ code[class*="language-"] {
 #close {
 	display: none;
 	position: fixed;
-	height: 2em;
-	width: 2em;
-	padding: 0.7em;
+	height: 1.25em;
+	width: 1.25em;
+	margin: 0.7em;
 	z-index: 1000;
 	cursor: pointer;
 }
@@ -251,5 +253,14 @@ nav > footer {
 
 	nav > footer {
 		display: block;
+	}
+
+	section {
+		padding: 0.15em;
+	}
+
+	.doc-box {
+		padding: 0.5em;
+		margin: 0.15em;
 	}
 }
