@@ -167,10 +167,10 @@ for (var i = 0; i &lt; buttons.length; i++) {
 			<div class="doc-box">
 				<h3>Add a click event to all buttons. Remove that event from a certain button.</h3>
 				<h4 class="doc-title">LDOM</h4>
-				<pre><code class="language-js">var activateButtonEventId = $("button").on("click", function(){
+				<pre><code class="language-js">var activateButtonEventId = $("button").on("click", function() {
 	this.addClass("button-active");	
 });
-$("button").eq(1).off("click", activateButtonEventId);</code></pre>
+$("button").eq(1).off(activateButtonEventId);</code></pre>
 				<h4 class="doc-title">Vanilla JavaScript</h4>
 				<pre><code class="language-js">var buttons = document.querySelectorAll("button");
 for (var i = 0; i &lt; buttons.length; i++) {
@@ -187,14 +187,17 @@ function addButtonActiveClass(){
 			<div class="doc-box">
 				<h3>Create a text element and insert it after each button.</h3>
 				<h4 class="doc-title">LDOM</h4>
-				<pre><code class="language-js">$("&lt;text&gt;").css("text-align", "center").text("Click the button above!").insertAfter($("button"));</code></pre>
+				<pre><code class="language-js">$("&lt;text&gt;")
+	.css("text-align", "center")
+	.text("Click the button above!")
+	.insertAfter($("button"));</code></pre>
 				<h4 class="doc-title">Vanilla JavaScript</h4>
 				<pre><code class="language-js">var textElem = document.createElement("text");
 textElem.style.textAlign = "center";
 textElem.innerText = "Click the button above!";
 var buttons = document.querySelectorAll("button");
 for (var i = 0; i &lt; buttons.length; i++) {
-	buttons[i].parentNode.insertBefore(textElem, buttons[i].nextSibling);
+	buttons[i].parentNode.insertBefore(textElem.cloneNode(true), buttons[i].nextSibling);
 }</code></pre>
 			</div>
 			<div class="doc-box">
@@ -203,24 +206,23 @@ for (var i = 0; i &lt; buttons.length; i++) {
 				<pre><code class="language-js">var nav = $("nav");
 $("section").each(function () {
 	var header = this.find(".section-title").first();
-	nav.appendChild($("&lt;a&gt;").addClass("nav-link").prop("href", "#" + header.attr("id")).text(header.text()));
+	nav.appendChild(
+		$("&lt;a&gt;")
+			.addClass("nav-link")
+			.prop("href", "#" + header.attr("id"))
+			.text(header.text())
+	);
 });</code></pre>
 				<h4 class="doc-title">Vanilla JavaScript</h4>
-				<pre><code class="language-js">var nav = document.querySelectorAll("nav");
+				<pre><code class="language-js">var nav = document.querySelector("nav");
 var sections = document.querySelectorAll("section");
 for (var i = 0; i &lt; sections.length; i++) {
-	var children = sections.children;
-	for (var j = 0; j &lt; children.length; j++) {
-		if (children[j].className.split(" ").indexOf("section-title") !== -1) {
-			var header = children[j];
-			var a = document.createElement("a");
-			a.className = "nav-link";
-			a.href = "#" + header.id;
-			a.innerText = header.innerText;
-			nav.appendChild(a);
-			break;
-		}
-	}
+	var header = sections[i].querySelector(".section-title");
+	var a = document.createElement("a");
+	a.className = "nav-link";
+	a.href = "#" + header.id;
+	a.innerText = header.innerText;
+	nav.appendChild(a);
 }
 </code></pre>
 			</div>
@@ -432,22 +434,6 @@ for (var i = 0; i &lt; sections.length; i++) {
 			</div>
 		</section>
 		<section>
-			<h2 class="section-title" id="unique">.unique()</h2>
-			<div class="p-like">
-				<div class="doc-box">
-					<pre><code class="language-js">.unique()</code></pre>
-					<h3 class="doc-title">Return Value</h3>
-					<dl>
-						<dt>LDOM Object</dt>
-						<dd>A new LDOM Object with duplicate DOM Elements removed.</dd>
-					</dl>
-					<br>
-					<h3 class="doc-title">Examples</h3>
-					<pre><code class="language-js">$("p").parent().unique()</code></pre>
-				</div>
-			</div>
-		</section>
-		<section>
 			<h2 class="section-title" id="first">.first()</h2>
 			<div class="p-like">
 				<div class="doc-box">
@@ -457,11 +443,6 @@ for (var i = 0; i &lt; sections.length; i++) {
 						<dt>LDOM Object</dt>
 						<dd>A new LDOM Object containing only the first element.</dd>
 					</dl>
-					<br>
-					<h3 class="doc-title">Information</h3>
-					<div>
-						Will return <code class="language-js">null</code> if the object contains zero elements.
-					</div>
 					<br>
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("p").first()</code></pre>
@@ -478,11 +459,6 @@ for (var i = 0; i &lt; sections.length; i++) {
 						<dt>LDOM Object</dt>
 						<dd>A new LDOM Object containing only the last element.</dd>
 					</dl>
-					<br>
-					<h3 class="doc-title">Information</h3>
-					<div>
-						Will return <code class="language-js">null</code> if the object contains zero elements.
-					</div>
 					<br>
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("p").last()</code></pre>
@@ -504,11 +480,6 @@ for (var i = 0; i &lt; sections.length; i++) {
 						<dt>LDOM Object</dt>
 						<dd>A new LDOM Object containing only the first element.</dd>
 					</dl>
-					<br>
-					<h3 class="doc-title">Information</h3>
-					<div>
-						Will return <code class="language-js">null</code> if there is no element at the specified index.
-					</div>
 					<br>
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$(".header-title").eq(3)</code></pre>
@@ -1155,7 +1126,7 @@ function changeColor() {
 					<h3 class="doc-title">Parameters</h3>
 					<dl>
 						<dt>targetElement</dt>
-						<dd>A LDOM Object for which all of the calling LDOM Elements will be inserted after.</dd>
+						<dd>A LDOM Object for which all of the calling LDOM Elements will be cloned and inserted after.</dd>
 					</dl>
 					<h3 class="doc-title">Return Value</h3>
 					<dl>
@@ -1169,27 +1140,6 @@ function changeColor() {
 			</div>
 		</section>
 		<section>
-			<h2 class="section-title" id="after">.after()</h2>
-			<div class="p-like">
-				<div class="doc-box">
-					<pre><code class="language-js">.after(newElement)</code></pre>
-					<h3 class="doc-title">Parameters</h3>
-					<dl>
-						<dt>newElement</dt>
-						<dd>A LDOM Object which will be inserted after the calling LDOM Elements.</dd>
-					</dl>
-					<h3 class="doc-title">Return Value</h3>
-					<dl>
-						<dt>LDOM Object</dt>
-						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
-					</dl>
-					<br>
-					<h3 class="doc-title">Examples</h3>
-					<pre><code class="language-js">$("img").after($("&lt;a&gt;").text("Click Me"));</code></pre>
-				</div>
-			</div>
-		</section>
-		<section>
 			<h2 class="section-title" id="insertBefore">.insertBefore()</h2>
 			<div class="p-like">
 				<div class="doc-box">
@@ -1197,7 +1147,7 @@ function changeColor() {
 					<h3 class="doc-title">Parameters</h3>
 					<dl>
 						<dt>targetElement</dt>
-						<dd>A LDOM Object for which all of the calling LDOM Elements will be inserted before.</dd>
+						<dd>A LDOM Object for which all of the calling LDOM Elements will be cloned and inserted before.</dd>
 					</dl>
 					<h3 class="doc-title">Return Value</h3>
 					<dl>
@@ -1211,27 +1161,6 @@ function changeColor() {
 			</div>
 		</section>
 		<section>
-			<h2 class="section-title" id="before">.before()</h2>
-			<div class="p-like">
-				<div class="doc-box">
-					<pre><code class="language-js">.before(newElement)</code></pre>
-					<h3 class="doc-title">Parameters</h3>
-					<dl>
-						<dt>newElement</dt>
-						<dd>A LDOM Object which will be inserted before the calling LDOM Elements.</dd>
-					</dl>
-					<h3 class="doc-title">Return Value</h3>
-					<dl>
-						<dt>LDOM Object</dt>
-						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
-					</dl>
-					<br>
-					<h3 class="doc-title">Examples</h3>
-					<pre><code class="language-js">$("img").before($("&lt;a&gt;").text("Click Me"));</code></pre>
-				</div>
-			</div>
-		</section>
-		<section>
 			<h2 class="section-title" id="appendChild">.appendChild()</h2>
 			<div class="p-like">
 				<div class="doc-box">
@@ -1239,7 +1168,7 @@ function changeColor() {
 					<h3 class="doc-title">Parameters</h3>
 					<dl>
 						<dt>childElement</dt>
-						<dd>A LDOM Object which will be appended to all of the calling LDOM Elements.</dd>
+						<dd>A LDOM Object which will be cloned and appended to all of the calling LDOM Elements.</dd>
 					</dl>
 					<h3 class="doc-title">Return Value</h3>
 					<dl>
@@ -1249,6 +1178,27 @@ function changeColor() {
 					<br>
 					<h3 class="doc-title">Examples</h3>
 					<pre><code class="language-js">$("h3").appendChild($("&lt;img&gt;").attr("src", "banner.png"));</code></pre>
+				</div>
+			</div>
+		</section>
+		<section>
+			<h2 class="section-title" id="prependChild">.prependChild()</h2>
+			<div class="p-like">
+				<div class="doc-box">
+					<pre><code class="language-js">.prependChild(childElement)</code></pre>
+					<h3 class="doc-title">Parameters</h3>
+					<dl>
+						<dt>childElement</dt>
+						<dd>A LDOM Object which will be cloned and prepended to all of the calling LDOM Elements.</dd>
+					</dl>
+					<h3 class="doc-title">Return Value</h3>
+					<dl>
+						<dt>LDOM Object</dt>
+						<dd>The existing LDOM Object is returned to allow function chaining.</dd>
+					</dl>
+					<br>
+					<h3 class="doc-title">Examples</h3>
+					<pre><code class="language-js">$("section").prependChild($("table"));</code></pre>
 				</div>
 			</div>
 		</section>

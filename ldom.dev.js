@@ -20,7 +20,10 @@
 		} else if (typeof input !== "string" && typeof input.length !== "undefined") {
 			var elements = [];
 			for (var i = 0; i < input.length; i++) {
-				elements.push($(input[i]));
+				var obj = $(input[i]);
+				if (obj.length > 0) {
+					elements.push(obj);
+				}
 			}
 			return new LDOMObject(elements);
 		} else {
@@ -48,12 +51,10 @@
 		this._LDOM = true;
 		if (Array.isArray(elem)) {
 			this.length = elem.length;
-			this.isList = true;
-			this.elements = elem;
+			this._elements = elem;
 		} else {
 			this.length = 1;
-			this.isList = false;
-			this.node = elem;
+			this._node = elem;
 		}
 	}
 
@@ -80,22 +81,19 @@
 	LDOMObject.prototype.parent = parent;
 	LDOMObject.prototype.children = children;
 	LDOMObject.prototype.filter = filter;
-	LDOMObject.prototype.unique = unique;
 	LDOMObject.prototype.first = first;
 	LDOMObject.prototype.last = last;
 	LDOMObject.prototype.eq = eq;
 	LDOMObject.prototype.insertAfter = insertAfter;
-	LDOMObject.prototype.after = after;
 	LDOMObject.prototype.insertBefore = insertBefore;
-	LDOMObject.prototype.before = before;
 	LDOMObject.prototype.appendChild = appendChild;
+	LDOMObject.prototype.prependChild = prependChild;
 	LDOMObject.prototype.remove = remove;
 
 	function LDOMWindowObject() {
 		this._LDOM = true;
 		this.length = 1;
-		this.isList = false;
-		this.node = window;
+		this._node = window;
 	}
 
 	LDOMWindowObject.prototype.each = each;
@@ -110,12 +108,12 @@
 
 	function each(funct, reverse) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
-		var thats = getThats(this);
-		var start = reverse ? thats.length - 1 : 0;
+		var elementsArray = getElementsArray(this);
+		var start = reverse ? elementsArray.length - 1 : 0;
 		var change = reverse ? -1 : 1;
-		var end = (reverse ? 0 : thats.length - 1) + change;
+		var end = (reverse ? 0 : elementsArray.length - 1) + change;
 		for (var i = start; i !== end; i += change) {
-			var shouldContinue = funct.apply(thats[i], [i]);
+			var shouldContinue = funct.apply(elementsArray[i], [i]);
 			if (shouldContinue === false) {
 				break;
 			}
@@ -128,17 +126,17 @@
 		if (this.length !== ldomObject.length) {
 			return false;
 		}
-		var thats = getThats(this);
-		var thatsObj = getThats(ldomObject);
-		if (thats.length !== thatsObj.length) {
+		var thisElementsArray = getElementsArray(this);
+		var otherElementsArray = getElementsArray(ldomObject);
+		if (thisElementsArray.length !== otherElementsArray.length) {
 			return false;
 		}
-		var thatsObjNodes = [];
-		for (var i = 0; i < thatsObj.length; i++) {
-			thatsObjNodes.push(thatsObj[i].node);
+		var otherNodes = [];
+		for (var i = 0; i < otherElementsArray.length; i++) {
+			otherNodes.push(otherElementsArray[i]._node);
 		}
-		for (var i = 0; i < thats.length; i++) {
-			if (thatsObjNodes.indexOf(thats[i].node) === -1) {
+		for (var i = 0; i < thisElementsArray.length; i++) {
+			if (otherNodes.indexOf(thisElementsArray[i]._node) === -1) {
 				return false;
 			}
 		}
@@ -149,7 +147,7 @@
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		var output = [];
 		this.each(function() {
-			var elems = this.node.querySelectorAll(selector);
+			var elems = this._node.querySelectorAll(selector);
 			for (var i = 0; i < elems.length; i++) {
 				output.push(elems[i]);
 			}
@@ -162,18 +160,18 @@
 		if (!isDefined(index)) {
 			var nodes = [];
 			this.each(function() {
-				nodes.push(this.node);
+				nodes.push(this._node);
 			});
 			return nodes;
 		} else {
-			var thats = getThats(this);
+			var elementsArray = getElementsArray(this);
 			if (index < 0) {
-				index = thats.length + index;
+				index = elementsArray.length + index;
 			}
-			if (!isDefined(thats[index])) {
+			if (!isDefined(elementsArray[index])) {
 				return null;
 			}
-			return thats[index].node;
+			return elementsArray[index]._node;
 		}
 	}
 
@@ -184,10 +182,10 @@
 			handler.apply($(this), [evt]);
 		};
 		this.each(function() {
-			this.node.addEventListener(eventName, handlerWrapper);
-			var eventIds = this.node._LDOMEvents || [];
+			this._node.addEventListener(eventName, handlerWrapper);
+			var eventIds = this._node._LDOMEvents || [];
 			eventIds.push(eventId);
-			this.node._LDOMEvents = eventIds;
+			this._node._LDOMEvents = eventIds;
 		});
 		if (!LDOMCache.eventListenerFunctions[eventName]) {
 			LDOMCache.eventListenerFunctions[eventName] = {};
@@ -206,7 +204,7 @@
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(eventName)) {
 			this.each(function() {
-				var eventIds = this.node._LDOMEvents || [];
+				var eventIds = this._node._LDOMEvents || [];
 				for (var i = eventIds.length - 1; i >= 0; i--) {
 					this.off(eventIds[i]);
 				}
@@ -216,7 +214,7 @@
 				if (!LDOMCache.eventListenerFunctions[eventName]) {
 					return;
 				}
-				var eventIds = this.node._LDOMEvents || [];
+				var eventIds = this._node._LDOMEvents || [];
 				for (var i = eventIds.length - 1; i >= 0; i--) {
 					if (LDOMCache.eventListenerFunctionsIds[eventIds[i]].name === eventName) {
 						this.off(eventIds[i]);
@@ -234,13 +232,13 @@
 					return;
 				}
 				var event = LDOMCache.eventListenerFunctions[eventName][eventId];
-				this.node.removeEventListener(eventName, event.funct);
-				var eventIds = this.node._LDOMEvents || [];
+				this._node.removeEventListener(eventName, event.funct);
+				var eventIds = this._node._LDOMEvents || [];
 				eventIds.splice(eventIds.indexOf(eventId), 1);
 				if (eventIds.length === 0) {
-					delete this.node._LDOMEvents;
+					delete this._node._LDOMEvents;
 				} else {
-					this.node._LDOMEvents = eventIds;
+					this._node._LDOMEvents = eventIds;
 				}
 				if (--event.count === 0) {
 					delete LDOMCache.eventListenerFunctions[eventName][eventId];
@@ -263,7 +261,7 @@
 		this.each(function() {
 			var that = this;
 			setTimeout(function() {
-				that.node.dispatchEvent(event);
+				that._node.dispatchEvent(event);
 			}, 0);
 		});
 		return this;
@@ -272,18 +270,18 @@
 	function hide() {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
-			if (this.node.style.display === "none") {
+			if (this._node.style.display === "none") {
 				return;
 			}
 			var isImportant = false;
-			if (this.node.style.display !== "") {
-				this.node.setAttribute("data-LDOM-hidden-previous-display", this.node.style.display);
-				if (this.node.style.getPropertyPriority("display") === "important") {
-					this.node.setAttribute("data-LDOM-hidden-previous-display-important", "true");
+			if (this._node.style.display !== "") {
+				this._node.setAttribute("data-LDOM-hidden-previous-display", this._node.style.display);
+				if (this._node.style.getPropertyPriority("display") === "important") {
+					this._node.setAttribute("data-LDOM-hidden-previous-display-important", "true");
 					isImportant = true;
 				}
 			}
-			this.node.style.setProperty("display", "none", isImportant ? "important" : "");
+			this._node.style.setProperty("display", "none", isImportant ? "important" : "");
 		});
 		return this;
 	}
@@ -291,12 +289,12 @@
 	function show() {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
-			if (this.node.hasAttribute("data-LDOM-hidden-previous-display")) {
-				this.node.style.setProperty("display", this.node.getAttribute("data-LDOM-hidden-previous-display"), this.node.hasAttribute("data-LDOM-hidden-previous-display-important") ? "important" : "");
-				this.node.removeAttribute("data-LDOM-hidden-previous-display");
-				this.node.removeAttribute("data-LDOM-hidden-previous-display-important");
-			} else if (this.node.style.display === "none") {
-				this.node.style.display = "";
+			if (this._node.hasAttribute("data-LDOM-hidden-previous-display")) {
+				this._node.style.setProperty("display", this._node.getAttribute("data-LDOM-hidden-previous-display"), this._node.hasAttribute("data-LDOM-hidden-previous-display-important") ? "important" : "");
+				this._node.removeAttribute("data-LDOM-hidden-previous-display");
+				this._node.removeAttribute("data-LDOM-hidden-previous-display-important");
+			} else if (this._node.style.display === "none") {
+				this._node.style.display = "";
 			}
 		});
 		return this;
@@ -305,7 +303,7 @@
 	function toggle(show) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
-			var shouldShow = this.node.hasAttribute("data-LDOM-hidden-previous-display") || this.node.style.display === "none";
+			var shouldShow = this._node.hasAttribute("data-LDOM-hidden-previous-display") || this._node.style.display === "none";
 			if (isDefined(show)) {
 				shouldShow = show;
 			}
@@ -321,11 +319,11 @@
 	function css(property, value, isImportant) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(value)) {
-			var thats = getThats(this);
-			return thats.length > 0 ? window.getComputedStyle(thats[0].node)[property] : "";
+			var elementsArray = getElementsArray(this);
+			return elementsArray.length > 0 ? window.getComputedStyle(elementsArray[0]._node)[property] : "";
 		} else {
 			this.each(function() {
-				this.node.style.setProperty(property, value, isImportant ? "important" : "");
+				this._node.style.setProperty(property, value, isImportant ? "important" : "");
 			});
 			return this;
 		}
@@ -334,49 +332,41 @@
 	function html(htmlString) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(htmlString)) {
-			var thats = getThats(this);
-			return thats.length > 0 ? thats[0].node.innerHTML : "";
+			var elementsArray = getElementsArray(this);
+			return elementsArray.length > 0 ? elementsArray[0]._node.innerHTML : "";
 		} else {
-			this.each(function() {
-				this.node.innerHTML = htmlString;
-			});
-			return this;
+			return setPropertyAndRemoveDetatchedNodes(this, "innerHTML", htmlString);
 		}
 	}
 
 	function outerHTML(htmlString) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(htmlString)) {
-			var thats = getThats(this);
-			return thats.length > 0 ? thats[0].node.outerHTML : "";
+			var elementsArray = getElementsArray(this);
+			return elementsArray.length > 0 ? elementsArray[0]._node.outerHTML : "";
 		} else {
-			this.each(function() {
-				this.node.outerHTML = htmlString;
-			});
+			return setPropertyAndRemoveDetatchedNodes(this, "outerHTML", htmlString);
 		}
 	}
 
 	function text(textString) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(textString)) {
-			var thats = getThats(this);
-			return thats.length > 0 ? thats[0].node.innerText : "";
+			var elementsArray = getElementsArray(this);
+			return elementsArray.length > 0 ? elementsArray[0]._node.innerText : "";
 		} else {
-			this.each(function() {
-				this.node.innerText = textString;
-			});
-			return this;
+			return setPropertyAndRemoveDetatchedNodes(this, "innerText", textString);
 		}
 	}
 
 	function prop(propertyName, value) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(value)) {
-			var thats = getThats(this);
-			return thats.length > 0 ? thats[0].node[propertyName] : "";
+			var elementsArray = getElementsArray(this);
+			return elementsArray.length > 0 ? elementsArray[0]._node[propertyName] : "";
 		} else {
 			this.each(function() {
-				this.node[propertyName] = value;
+				this._node[propertyName] = value;
 			});
 			return this;
 		}
@@ -385,11 +375,11 @@
 	function attr(attributeName, value) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(value)) {
-			var thats = getThats(this);
-			return thats.length > 0 ? thats[0].node.getAttribute(attributeName) : "";
+			var elementsArray = getElementsArray(this);
+			return elementsArray.length > 0 ? elementsArray[0]._node.getAttribute(attributeName) : "";
 		} else {
 			this.each(function() {
-				this.node.setAttribute(attributeName, value);
+				this._node.setAttribute(attributeName, value);
 			});
 			return this;
 		}
@@ -398,7 +388,7 @@
 	function removeAttr(attributeName) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
-			this.node.removeAttribute(attributeName);
+			this._node.removeAttribute(attributeName);
 		});
 		return this;
 	}
@@ -406,14 +396,14 @@
 	function addClass(className) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
-			var classes = (this.node.getAttribute("class") || "").split(" ");
+			var classes = (this._node.getAttribute("class") || "").split(" ");
 			var newClasses = className.split(" ");
 			for (var i = 0; i < newClasses.length; i++) {
 				if (classes.indexOf(newClasses[i]) === -1) {
 					classes.push(newClasses[i]);
 				}
 			}
-			this.node.setAttribute("class", classes.join(" ").trim());
+			this._node.setAttribute("class", classes.join(" ").trim());
 		});
 		return this;
 	}
@@ -422,11 +412,11 @@
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		if (!isDefined(className)) {
 			this.each(function() {
-				this.node.removeAttribute("class");
+				this._node.removeAttribute("class");
 			});
 		} else {
 			this.each(function() {
-				var classes = (this.node.getAttribute("class") || "").split(" ");
+				var classes = (this._node.getAttribute("class") || "").split(" ");
 				var newClasses = className.split(" ");
 				for (var i = 0; i < newClasses.length; i++) {
 					var classIndex = classes.indexOf(newClasses[i]);
@@ -434,7 +424,7 @@
 						classes.splice(classIndex, 1);
 					}
 				}
-				this.node.setAttribute("class", classes.join(" ").trim());
+				this._node.setAttribute("class", classes.join(" ").trim());
 			});
 		}
 		return this;
@@ -444,7 +434,7 @@
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		var doesHaveClass = false;
 		this.each(function() {
-			var classes = (this.node.getAttribute("class") || "").split(" ");
+			var classes = (this._node.getAttribute("class") || "").split(" ");
 			if (classes.indexOf(className) !== -1) {
 				doesHaveClass = true;
 				if (!all) {
@@ -464,7 +454,9 @@
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		var output = [];
 		this.each(function() {
-			output.push(this.node.parentNode);
+			if (output.indexOf(this._node.parentNode) === -1) {
+				output.push(this._node.parentNode);
+			}
 		});
 		return $(output);
 	}
@@ -473,7 +465,7 @@
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		var output = [];
 		this.each(function() {
-			var elems = this.node.children;
+			var elems = this._node.children;
 			for (var i = 0; i < elems.length; i++) {
 				output.push(elems[i]);
 			}
@@ -483,6 +475,9 @@
 
 	function filter(selector) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
+		if (!selector) {
+			return $([]);
+		}
 		var matchesMethod = "matches";
 		if (Element.prototype.matches) {
 			matchesMethod = "matches";
@@ -495,95 +490,60 @@
 		}
 		var output = [];
 		this.each(function() {
-			if (this.node[matchesMethod](selector)) {
-				output.push(this.node);
+			if (this._node[matchesMethod](selector)) {
+				output.push(this);
 			}
 		});
-		return $(output);
-	}
-
-	function unique() {
-		LDOMCache.functionsUsed[arguments.callee.name] = true;
-		var output = [];
-		var thats = getThats(this);
-		var nodes = this.get();
-		for (var i = 0; i < nodes.length; i++) {
-			if (nodes.indexOf(nodes[i]) === i) {
-				output.push(thats[i]);
-			}
-		}
 		return $(output);
 	}
 
 	function first() {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
-		var thats = getThats(this);
-		if (thats.length === 0) {
-			return null;
+		var elementsArray = getElementsArray(this);
+		if (elementsArray.length === 0) {
+			return $([]);
 		}
-		return thats[0];
+		return elementsArray[0];
 	}
 
 	function last() {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
-		var thats = getThats(this);
-		if (thats.length === 0) {
-			return null;
+		var elementsArray = getElementsArray(this);
+		if (elementsArray.length === 0) {
+			return $([]);
 		}
-		return thats[thats.length - 1];
+		return elementsArray[elementsArray.length - 1];
 	}
 
 	function eq(index) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
-		var thats = getThats(this);
+		var elementsArray = getElementsArray(this);
 		if (index < 0) {
-			index = thats.length + index;
+			index = elementsArray.length + index;
 		}
-		if (!isDefined(thats[index])) {
-			return null;
+		if (!isDefined(elementsArray[index])) {
+			return $([]);
 		}
-		return thats[index];
+		return elementsArray[index];
 	}
 
 	function insertAfter(ldomObjectTarget) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
-			var callingNode = this.node;
+			var callingNode = this._node;
 			ldomObjectTarget.each(function() {
-				this.node.parentNode.insertBefore(callingNode, this.node.nextSibling);
+				this._node.parentNode.insertBefore(callingNode.cloneNode(true), this._node.nextSibling);
 			});
 		}, true);
-		return this;
-	}
-
-	function after(newElement) {
-		LDOMCache.functionsUsed[arguments.callee.name] = true;
-		this.each(function() {
-			var callingNode = this.node;
-			newElement.each(function() {
-				callingNode.parentNode.insertBefore(this.node, callingNode.nextSibling);
-			}, true);
-		});
 		return this;
 	}
 
 	function insertBefore(ldomObjectTarget) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
-			var callingNode = this.node;
+			var callingNode = this._node;
 			ldomObjectTarget.each(function() {
-				this.node.parentNode.insertBefore(callingNode, this.node);
-			});
-		});
-		return this;
-	}
-
-	function before(newElement) {
-		LDOMCache.functionsUsed[arguments.callee.name] = true;
-		this.each(function() {
-			var callingNode = this.node;
-			newElement.each(function() {
-				callingNode.parentNode.insertBefore(this.node, callingNode);
+				this._node.parentNode.insertBefore(callingNode.cloneNode(true), this._node);
 			});
 		});
 		return this;
@@ -592,11 +552,21 @@
 	function appendChild(childElement) {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
-			var callingNode = this.node;
+			var callingNode = this._node;
 			childElement.each(function() {
-				callingNode.appendChild(childElement.node);
+				callingNode.appendChild(this._node.cloneNode(true));
 			});
-			this.node.appendChild(childElement.node);
+		});
+		return this;
+	}
+
+	function prependChild(childElement) {
+		LDOMCache.functionsUsed[arguments.callee.name] = true;
+		this.each(function() {
+			var callingNode = this._node;
+			childElement.each(function() {
+				callingNode.insertBefore(this._node.cloneNode(true), callingNode.firstChild);
+			}, true);
 		});
 		return this;
 	}
@@ -604,17 +574,35 @@
 	function remove() {
 		LDOMCache.functionsUsed[arguments.callee.name] = true;
 		this.each(function() {
-			if (this.off) {
+			if (isDefined(this.off)) {
 				this.off();
 			}
-			this.node.parentNode.removeChild(this.node);
+			this._node.parentNode.removeChild(this._node);
 		});
-		return this;
 	}
 
-	function getThats(obj) {
-		if (obj.isList) {
-			return obj.elements;
+	// Internal Helper Functions
+
+	function setPropertyAndRemoveDetatchedNodes(ldomObject, property, value) {
+		ldomObject.each(function() {
+			this.inPage = document.body.contains(this._node);
+		});
+		ldomObject.each(function() {
+			this._node[property] = value;
+		});
+		var output = [];
+		ldomObject.each(function() {
+			if (!this.inPage || document.body.contains(this._node)) {
+				output.push(this);
+			}
+			delete this.inPage;
+		});
+		return $(output);
+	}
+
+	function getElementsArray(obj) {
+		if (obj._elements) {
+			return obj._elements;
 		} else {
 			return [obj];
 		}
