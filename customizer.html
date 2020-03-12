@@ -151,9 +151,9 @@
 				if (isAlwaysActive) {
 					newCheckboxGroup.attr("title", "Cannot disable core function.");
 					if ($("input[type='checkbox'][disabled]").length > 0) {
-						$("input[type='checkbox'][disabled]").parent().last().after(newCheckboxGroup);
+						newCheckboxGroup.insertAfter($("input[type='checkbox'][disabled]").parent().last());
 					} else if ($("input").length > 0) {
-						$("input").parent().first().before(newCheckboxGroup);
+						newCheckboxGroup.insertBefore($("input").parent().first());
 					} else {
 						div.appendChild(newCheckboxGroup);
 					}

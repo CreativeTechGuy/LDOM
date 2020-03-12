@@ -60,10 +60,10 @@ for (var i = 0; i < buttons.length; i++) {
 
 #### LDOM
 ```js
-var activateButtonEventId = $("button").on("click", function(){
+var activateButtonEventId = $("button").on("click", function() {
 	this.addClass("button-active");	
 });
-$("button").eq(1).off("click", activateButtonEventId);
+$("button").eq(1).off(activateButtonEventId);
 ```
 #### Vanilla JavaScript
 ```js
@@ -86,7 +86,10 @@ function addButtonActiveClass(){
 
 #### LDOM
 ```js
-$("<text>").css("text-align", "center").text("Click the button above!").insertAfter($("button"));
+$("<text>")
+	.css("text-align", "center")
+	.text("Click the button above!")
+	.insertAfter($("button"));
 ```
 #### Vanilla JavaScript
 ```js
@@ -95,7 +98,7 @@ textElem.style.textAlign = "center";
 textElem.innerText = "Click the button above!";
 var buttons = document.querySelectorAll("button");
 for (var i = 0; i < buttons.length; i++) {
-	buttons[i].parentNode.insertBefore(textElem, buttons[i].nextSibling);
+	buttons[i].parentNode.insertBefore(textElem.cloneNode(true), buttons[i].nextSibling);
 }
 ```
 ---
