@@ -335,7 +335,7 @@
 			var elementsArray = getElementsArray(this);
 			return elementsArray.length > 0 ? elementsArray[0]._node.innerHTML : "";
 		} else {
-			return setPropertyAndRemoveDetatchedNodes(this, "innerHTML", htmlString);
+			return setPropertyAndRemoveDetachedNodes(this, "innerHTML", htmlString);
 		}
 	}
 
@@ -345,7 +345,7 @@
 			var elementsArray = getElementsArray(this);
 			return elementsArray.length > 0 ? elementsArray[0]._node.outerHTML : "";
 		} else {
-			return setPropertyAndRemoveDetatchedNodes(this, "outerHTML", htmlString);
+			return setPropertyAndRemoveDetachedNodes(this, "outerHTML", htmlString);
 		}
 	}
 
@@ -355,7 +355,7 @@
 			var elementsArray = getElementsArray(this);
 			return elementsArray.length > 0 ? elementsArray[0]._node.innerText : "";
 		} else {
-			return setPropertyAndRemoveDetatchedNodes(this, "innerText", textString);
+			return setPropertyAndRemoveDetachedNodes(this, "innerText", textString);
 		}
 	}
 
@@ -583,7 +583,7 @@
 
 	// Internal Helper Functions
 
-	function setPropertyAndRemoveDetatchedNodes(ldomObject, property, value) {
+	function setPropertyAndRemoveDetachedNodes(ldomObject, property, value) {
 		ldomObject.each(function() {
 			this.inPage = document.body.contains(this._node);
 		});
